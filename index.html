@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lunaria SMP - Economy Hub</title>
     <style>
-        /* 🌌 Premium Deep Purple Space Gradient Backdrop */
         body { 
             font-family: 'Segoe UI', system-ui, sans-serif; 
             background: linear-gradient(135deg, #0d0624 0%, #1a0f3c 45%, #060214 100%);
@@ -19,7 +18,6 @@
             overflow-x: hidden;
         }
 
-        /* 🌙 Background Canvas for the Star Generators */
         #stars-container {
             position: fixed;
             top: 0;
@@ -30,7 +28,6 @@
             pointer-events: none;
         }
 
-        /* ✨ Twinkling Four-Pointed Sparkle Stars (From the Banner!) */
         .sparkle-star {
             position: absolute;
             background: #ffffff;
@@ -41,7 +38,6 @@
             animation: twinklePulse var(--duration) infinite ease-in-out;
         }
 
-        /* Generates the cross flare shapes */
         .sparkle-star::before, .sparkle-star::after {
             content: '';
             position: absolute;
@@ -58,7 +54,6 @@
             50% { transform: scale(1); opacity: 1; }
         }
 
-        /* 🌠 Slower Moving Group Falling Stars with Nice Gradient Trails */
         .shooting-star {
             position: fixed;
             top: var(--start-y);
@@ -76,7 +71,6 @@
             100% { width: 0; transform: translate(var(--travel-x), var(--travel-y)) rotate(-45deg); opacity: 0; }
         }
 
-        /* ✨ Glowing Neon Server Branding Text */
         .banner-title {
             font-size: 4rem;
             font-weight: 900;
@@ -95,7 +89,6 @@
             text-shadow: 0 0 10px rgba(168, 85, 247, 0.4);
         }
 
-        /* 🏰 Floating Glass Container Card Window Dashboard */
         .container { 
             max-width: 850px; 
             margin: 0 auto; 
@@ -128,7 +121,6 @@
 
         .market-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 25px; margin-top: 10px; }
         
-        /* Premium Glowing Pricing Registry Cards */
         .item-card {
             background: rgba(30, 16, 61, 0.65);
             border: 1px solid rgba(168, 85, 247, 0.25);
@@ -160,7 +152,6 @@
 </head>
 <body>
 
-    <!-- Target Star Node Backdrop Container -->
     <div id="stars-container"></div>
 
     <div class="banner-title">LUNARIA</div>
@@ -197,10 +188,10 @@
 
 <script>
     let currentData = [];
-    // Verified pointing directly to your live API backend!
-    const API_URL = "https://onrender.com"; 
+    
+    // Leaving this empty tells the website to safely talk to its own direct link address!
+    const API_URL = ""; 
 
-    // Generate Twinkling Cross Stars Background
     function generatePremiumSky() {
         const container = document.getElementById('stars-container');
         if(!container) return;
@@ -220,14 +211,13 @@
         }
     }
 
-    // Spawn falling star groupings sliding out of the upper right quadrant corner
     function spawnFallingStar() {
         const star = document.createElement('div');
         star.classList.add('shooting-star');
 
         const startX = Math.random() * window.innerWidth;
         const startY = Math.random() * (window.innerHeight / 3.5); 
-        const duration = Math.random() * 2 + 3; // Graceful slide pace
+        const duration = Math.random() * 2 + 3;
 
         star.style.setProperty('--start-x', startX + 'px');
         star.style.setProperty('--start-y', startY + 'px');
@@ -243,3 +233,14 @@
     }
 
     async function fetchPrices() {
+        const query = document.getElementById('search').value;
+        try {
+            const response = await fetch(API_URL + '/api/prices?search=' + query);
+            currentData = await response.json();
+            const grid = document.getElementById('market-grid');
+            grid.innerHTML = ''; 
+            
+            currentData.forEach(function(item) {
+                grid.innerHTML += '<div class="item-card">' +
+                    '<div class="item-name">' + item.item_name + '</div>' +
+                    '<span class="item-namespace">' + item.item_id + '</span>' +
