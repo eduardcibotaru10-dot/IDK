@@ -2,16 +2,16 @@
   {
     "item_id": "minecraft:diamond",
     "item_name": "Diamond",
-    "sell_price": 150
+    "sell_price": 150.00
   },
   {
     "item_id": "minecraft:iron_ingot",
     "item_name": "Iron Ingot",
-    "sell_price": 15
+    "sell_price": 15.00
   },
   {
     "item_id": "minecraft:netherite_ingot",
     "item_name": "Netherite Ingot",
-    "sell_price": 2000
+    "sell_price": 2000.00
   }
 ]
