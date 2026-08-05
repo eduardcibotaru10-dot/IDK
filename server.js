@@ -16,8 +16,10 @@ app.use(express.static(__dirname));
 function readItemsFromFile() {
     try {
         if (!fs.existsSync(DATA_FILE)) return [];
+
         const fileData = fs.readFileSync(DATA_FILE, 'utf8');
         return JSON.parse(fileData);
+
     } catch (err) {
         console.error("Error reading JSON file:", err);
         return [];
@@ -26,81 +28,196 @@ function readItemsFromFile() {
 
 function writeItemsToFile(data) {
     try {
-        fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2), 'utf8');
+        fs.writeFileSync(
+            DATA_FILE,
+            JSON.stringify(data, null, 2),
+            'utf8'
+        );
+
+        return true;
+
     } catch (err) {
         console.error("Error writing to JSON file:", err);
+        return false;
     }
 }
+
+/* =========================
+   MAIN WEBSITE
+========================= */
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// Search Route
+/* =========================
+   SEARCH ITEMS
+========================= */
+
 app.get('/api/prices', (req, res) => {
-    const query = req.query.search ? req.query.search.toLowerCase() : '';
+
+    const query = req.query.search
+        ? req.query.search.toLowerCase()
+        : '';
+
     const items = readItemsFromFile();
-    const filteredRows = items.filter(item => 
-        item.item_name.toLowerCase().includes(query) || 
+
+    const filteredRows = items.filter(item =>
+        item.item_name.toLowerCase().includes(query) ||
         item.item_id.toLowerCase().includes(query)
     );
+
     res.json(filteredRows);
 });
 
-// Admin Update/Add Route
-app.post('/api/prices/update', (req, res) => {
-    const { item_id, item_name, buy_price, sell_price, password } = req.body;
+/* =========================
+   ADMIN UPDATE / ADD
+========================= */
 
+app.post('/api/prices/update', (req, res) => {
+
+    const {
+        item_id,
+        item_name,
+        sell_price,
+        password
+    } = req.body;
+
+    /* Check password */
     if (password !== ADMIN_PASSWORD) {
-        return res.status(403).json({ message: "❌ Invalid Admin Password Access Denied!" });
+        return res.status(403).json({
+            message: "❌ Invalid Admin Password Access Denied!"
+        });
+    }
+
+    /* Validate item ID */
+    if (!item_id) {
+        return res.status(400).json({
+            message: "❌ Item Namespace ID is required!"
+        });
+    }
+
+    /* Validate price */
+    const parsedSellPrice = parseFloat(sell_price);
+
+    if (isNaN(parsedSellPrice) || parsedSellPrice < 0) {
+        return res.status(400).json({
+            message: "❌ Worth price must be a valid number!"
+        });
     }
 
     let items = readItemsFromFile();
+
+    /* Find existing item */
     let item = items.find(i => i.item_id === item_id);
 
     if (item) {
-        item.buy_price = parseFloat(buy_price);
-        item.sell_price = parseFloat(sell_price);
-        writeItemsToFile(items);
-        res.json({ message: "🎯 Prices successfully updated in your items file!" });
-    } else {
-        if (!item_name) {
-            return res.status(400).json({ message: "❌ New items require an Item Name!" });
+
+        /* Update existing item */
+        item.sell_price = parsedSellPrice;
+
+        /* Allow changing the display name if provided */
+        if (item_name) {
+            item.item_name = item_name;
         }
+
+        if (!writeItemsToFile(items)) {
+            return res.status(500).json({
+                message: "❌ Failed to save changes to items.json!"
+            });
+        }
+
+        return res.json({
+            message: "🎯 Worth price successfully updated!"
+        });
+
+    } else {
+
+        /* New item requires a name */
+        if (!item_name) {
+            return res.status(400).json({
+                message: "❌ New items require an Item Name!"
+            });
+        }
+
         const newItem = {
             item_id: item_id,
             item_name: item_name,
-            buy_price: parseFloat(buy_price),
-            sell_price: parseFloat(sell_price)
+            sell_price: parsedSellPrice
         };
+
         items.push(newItem);
-        writeItemsToFile(items);
-        res.json({ message: `✨ ${item_name} successfully added as a new item!` });
+
+        if (!writeItemsToFile(items)) {
+            return res.status(500).json({
+                message: "❌ Failed to save new item!"
+            });
+        }
+
+        return res.json({
+            message: `✨ ${item_name} successfully added to the registry!`
+        });
     }
 });
 
-// 🗑️ NEW: Admin Delete Item Route
-app.post('/api/prices/delete', (req, res) => {
-    const { item_id, password } = req.body;
+/* =========================
+   ADMIN DELETE
+========================= */
 
+app.post('/api/prices/delete', (req, res) => {
+
+    const {
+        item_id,
+        password
+    } = req.body;
+
+    /* Check password */
     if (password !== ADMIN_PASSWORD) {
-        return res.status(403).json({ message: "❌ Invalid Admin Password Access Denied!" });
+        return res.status(403).json({
+            message: "❌ Invalid Admin Password Access Denied!"
+        });
+    }
+
+    if (!item_id) {
+        return res.status(400).json({
+            message: "❌ Item Namespace ID is required!"
+        });
     }
 
     let items = readItemsFromFile();
-    const initialLength = items.length;
-    
-    // Filter out the item to remove it completely
-    items = items.filter(i => i.item_id !== item_id);
 
+    const initialLength = items.length;
+
+    /* Remove item */
+    items = items.filter(
+        i => i.item_id !== item_id
+    );
+
+    /* Item wasn't found */
     if (items.length === initialLength) {
-        return res.status(404).json({ message: "❌ Item ID not found in file." });
+        return res.status(404).json({
+            message: "❌ Item ID not found in registry."
+        });
     }
 
-    writeItemsToFile(items);
-    res.json({ message: "🗑️ Item successfully wiped from the registry file!" });
+    /* Save */
+    if (!writeItemsToFile(items)) {
+        return res.status(500).json({
+            message: "❌ Failed to save deletion!"
+        });
+    }
+
+    res.json({
+        message: "🗑️ Item successfully removed from the registry!"
+    });
 });
 
+/* =========================
+   START SERVER
+========================= */
+
 app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Server running on port ${PORT}`);
+    console.log(
+        `🌙 Lunaria Economy API running on port ${PORT}`
+    );
 });
