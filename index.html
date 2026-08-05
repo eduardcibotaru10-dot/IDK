@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lunaria SMP - Economy Hub</title>
     <style>
-        /* 🌌 Deep Magical Night Sky Base Background Layering */
+        /* 🌌 Premium Deep Purple Space Gradient Backdrop */
         body { 
             font-family: 'Segoe UI', system-ui, sans-serif; 
-            background: radial-gradient(circle at 50% 25%, #251254 0%, #0d0624 55%, #050212 100%);
+            background: linear-gradient(135deg, #0d0624 0%, #1a0f3c 45%, #060214 100%);
             color: #f1edfa; 
             text-align: center; 
             padding: 60px 20px; 
@@ -19,7 +19,7 @@
             overflow-x: hidden;
         }
 
-        /* 🌙 Background Star Layer Canvas */
+        /* 🌙 Background Canvas for the Star Generators */
         #stars-container {
             position: fixed;
             top: 0;
@@ -30,48 +30,35 @@
             pointer-events: none;
         }
 
-        /* ✨ Sharp Four-Pointed Sparkle Stars (Matches the Banner!) */
+        /* ✨ Twinkling Four-Pointed Sparkle Stars (From the Banner!) */
         .sparkle-star {
             position: absolute;
             background: #ffffff;
-            width: 5px;
-            height: 5px;
+            width: 4px;
+            height: 4px;
             border-radius: 50%;
-            /* Intense layered drop-shadow filters build a clean neon purple glare core */
-            filter: drop-shadow(0 0 4px #ffffff) drop-shadow(0 0 10px #b066ff) drop-shadow(0 0 20px #9333ea);
-            animation: pulseTwinkle var(--duration) infinite ease-in-out;
+            filter: drop-shadow(0 0 8px #ffffff) drop-shadow(0 0 16px #b066ff);
+            animation: twinklePulse var(--duration) infinite ease-in-out;
         }
 
-        /* Draws the wide horizontal beams */
-        .sparkle-star::before {
+        /* Generates the cross flare shapes */
+        .sparkle-star::before, .sparkle-star::after {
             content: '';
             position: absolute;
             background: linear-gradient(to right, transparent, #ffffff, transparent);
-            width: var(--star-size);
-            height: 2px;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
         }
+        .sparkle-star::before { width: var(--star-size); height: 1px; }
+        .sparkle-star::after { width: 1px; height: var(--star-size); transform: translate(-50%, -50%) rotate(90deg); }
 
-        /* Draws the tall vertical beams */
-        .sparkle-star::after {
-            content: '';
-            position: absolute;
-            background: linear-gradient(to bottom, transparent, #ffffff, transparent);
-            width: 2px;
-            height: var(--star-size);
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+        @keyframes twinklePulse {
+            0%, 100% { transform: scale(0.3); opacity: 0.2; }
+            50% { transform: scale(1); opacity: 1; }
         }
 
-        @keyframes pulseTwinkle {
-            0%, 100% { transform: scale(0.3); opacity: 0.15; }
-            50% { transform: scale(1.1); opacity: 1; }
-        }
-
-        /* 🌠 Smooth, Graceful Drifting Passing Star Clusters */
+        /* 🌠 Slower Moving Group Falling Stars with Nice Gradient Trails */
         .shooting-star {
             position: fixed;
             top: var(--start-y);
@@ -79,92 +66,90 @@
             height: 2px;
             background: linear-gradient(-45deg, #ffffff, #c084fc, rgba(0, 0, 0, 0));
             filter: drop-shadow(0 0 6px #c084fc);
-            animation: slowShoot var(--duration) ease-in-out forwards;
+            animation: slideMeteor var(--duration) ease-in-out forwards;
             z-index: -1;
         }
 
-        @keyframes slowShoot {
+        @keyframes slideMeteor {
             0% { width: 0; transform: rotate(-45deg); opacity: 0; }
-            15% { width: 90px; opacity: 1; }
+            15% { width: 80px; opacity: 1; }
             100% { width: 0; transform: translate(var(--travel-x), var(--travel-y)) rotate(-45deg); opacity: 0; }
         }
 
-        /* ✨ Banner Branding Neon Header Elements */
+        /* ✨ Glowing Neon Server Branding Text */
         .banner-title {
-            font-size: 4.2rem;
+            font-size: 4rem;
             font-weight: 900;
             color: #ffffff;
             margin-bottom: 2px;
-            text-shadow: 0 0 20px rgba(168, 85, 247, 0.9), 0 0 50px rgba(192, 132, 252, 0.6);
-            letter-spacing: 7px;
+            text-shadow: 0 0 25px rgba(168, 85, 247, 0.9), 0 0 50px rgba(192, 132, 252, 0.5);
+            letter-spacing: 6px;
         }
         .tagline {
             color: #d8b4fe;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             letter-spacing: 5px;
             text-transform: uppercase;
-            margin-bottom: 50px;
+            margin-bottom: 45px;
             opacity: 0.85;
-            text-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+            text-shadow: 0 0 10px rgba(168, 85, 247, 0.4);
         }
 
-        /* 🏰 Floating High-Glass Window Container Dashboard */
+        /* 🏰 Floating Glass Container Card Window Dashboard */
         .container { 
             max-width: 850px; 
             margin: 0 auto; 
-            background: rgba(13, 6, 29, 0.8); 
+            background: rgba(13, 6, 29, 0.85); 
             padding: 40px; 
-            border-radius: 26px; 
-            border: 1px solid rgba(168, 85, 247, 0.45); 
-            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.9), inset 0 0 30px rgba(168, 85, 247, 0.2);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-            animation: softFloating 6s ease-in-out infinite;
+            border-radius: 24px; 
+            border: 1px solid rgba(168, 85, 247, 0.4); 
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85), inset 0 0 25px rgba(168, 85, 247, 0.15);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            animation: subtleHover 6s ease-in-out infinite;
         }
 
-        @keyframes softFloating {
+        @keyframes subtleHover {
             0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-12px); }
+            50% { transform: translateY(-10px); }
         }
 
         input, select { 
             width: 92%; 
             padding: 16px; 
-            margin-bottom: 30px; 
+            margin-bottom: 25px; 
             border-radius: 12px; 
             border: 1px solid rgba(168, 85, 247, 0.5); 
             background: rgba(7, 3, 15, 0.95); 
             color: #fff; 
             font-size: 16px; 
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.6);
         }
-        input:focus { border-color: #c084fc; outline: none; box-shadow: 0 0 20px rgba(168, 85, 247, 0.7); }
+        input:focus { border-color: #c084fc; outline: none; box-shadow: 0 0 15px rgba(168, 85, 247, 0.6); }
 
-        /* Market Card Arrangement Setup */
-        .market-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 25px; margin-top: 10px; }
+        .market-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 25px; margin-top: 10px; }
         
-        /* High Quality Magic Item Profile Cards */
+        /* Premium Glowing Pricing Registry Cards */
         .item-card {
-            background: rgba(28, 14, 59, 0.65);
-            border: 1px solid rgba(168, 85, 247, 0.3);
+            background: rgba(30, 16, 61, 0.65);
+            border: 1px solid rgba(168, 85, 247, 0.25);
             border-radius: 18px;
             padding: 24px;
             text-align: left;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.5);
             transition: all 0.3s ease;
         }
         .item-card:hover {
-            transform: translateY(-4px);
-            border-color: rgba(168, 85, 247, 0.9);
-            background: rgba(43, 21, 92, 0.75);
-            box-shadow: 0 12px 35px rgba(168, 85, 247, 0.5);
+            transform: scale(1.03);
+            border-color: rgba(168, 85, 247, 0.8);
+            background: rgba(45, 24, 92, 0.75);
+            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.5);
         }
 
-        .item-name { font-size: 1.35rem; font-weight: bold; color: #ffffff; text-shadow: 0 0 10px rgba(255,255,255,0.2); }
+        .item-name { font-size: 1.3rem; font-weight: bold; color: #ffffff; }
         .item-namespace { font-size: 0.8rem; color: #c084fc; opacity: 0.8; display: block; margin-bottom: 15px; }
         .price-row { display: flex; justify-content: space-between; margin-top: 8px; font-size: 1.05rem; }
-        .buy-value { color: #4ade80; font-weight: 700; text-shadow: 0 0 10px rgba(74, 222, 128, 0.4); }
-        .sell-value { color: #f87171; font-weight: 700; text-shadow: 0 0 10px rgba(248, 113, 113, 0.4); }
+        .buy-value { color: #4ade80; font-weight: 700; text-shadow: 0 0 10px rgba(74, 222, 128, 0.3); }
+        .sell-value { color: #f87171; font-weight: 700; text-shadow: 0 0 10px rgba(248, 113, 113, 0.3); }
         
         .admin-trigger { margin-top: 40px; color: #a78bfa; background: none; border: none; cursor: pointer; font-size: 0.95rem; text-decoration: underline; opacity: 0.5; }
         .admin-trigger:hover { opacity: 1; }
@@ -175,7 +160,7 @@
 </head>
 <body>
 
-    <!-- Target injection canvas backdrop -->
+    <!-- Target Star Node Backdrop Container -->
     <div id="stars-container"></div>
 
     <div class="banner-title">LUNARIA</div>
@@ -212,19 +197,20 @@
 
 <script>
     let currentData = [];
+    // Verified pointing directly to your live API backend!
     const API_URL = "https://onrender.com"; 
 
-    // Generate Dynamic Cross Flares Sparkle Node arrays
+    // Generate Twinkling Cross Stars Background
     function generatePremiumSky() {
         const container = document.getElementById('stars-container');
         if(!container) return;
-        const totalStars = 75; 
+        const totalStars = 60; 
 
         for (let i = 0; i < totalStars; i++) {
             const star = document.createElement('div');
             star.classList.add('sparkle-star');
             
-            const starSize = Math.random() * 22 + 12; // Controls cross beam length directly
+            const starSize = Math.random() * 20 + 10; 
             star.style.top = (Math.random() * 100) + '%';
             star.style.left = (Math.random() * 100) + '%';
             star.style.setProperty('--duration', (Math.random() * 3 + 2.5) + 's');
@@ -234,14 +220,26 @@
         }
     }
 
-    // Spawn passing groups from corners
-    function spawnDriftingStar() {
+    // Spawn falling star groupings sliding out of the upper right quadrant corner
+    function spawnFallingStar() {
         const star = document.createElement('div');
         star.classList.add('shooting-star');
 
         const startX = Math.random() * window.innerWidth;
-        const startY = Math.random() * (window.innerHeight / 3); 
-        const duration = Math.random() * 2 + 3.5; 
+        const startY = Math.random() * (window.innerHeight / 3.5); 
+        const duration = Math.random() * 2 + 3; // Graceful slide pace
 
         star.style.setProperty('--start-x', startX + 'px');
         star.style.setProperty('--start-y', startY + 'px');
+        star.style.setProperty('--travel-x', '-' + (Math.random() * 400 + 400) + 'px');
+        star.style.setProperty('--travel-y', (Math.random() * 400 + 400) + 'px');
+        star.style.setProperty('--duration', duration + 's');
+
+        document.body.appendChild(star);
+
+        setTimeout(function() {
+            star.remove();
+        }, duration * 1000);
+    }
+
+    async function fetchPrices() {
