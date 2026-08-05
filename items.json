@@ -1,0 +1,5 @@
+[
+  { "item_id": "minecraft:diamond", "item_name": "Diamond", "buy_price": 500.00, "sell_price": 150.00 },
+  { "item_id": "minecraft:iron_ingot", "item_name": "Iron Ingot", "buy_price": 50.00, "sell_price": 15.00 },
+  { "item_id": "minecraft:netherite_ingot", "item_name": "Netherite Ingot", "buy_price": 5000.00, "sell_price": 2000.00 }
+]
