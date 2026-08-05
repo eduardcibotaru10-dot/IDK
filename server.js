@@ -13,12 +13,9 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(__dirname));
 
-// Helper function to safely read items from your file
 function readItemsFromFile() {
     try {
-        if (!fs.existsSync(DATA_FILE)) {
-            return [];
-        }
+        if (!fs.existsSync(DATA_FILE)) return [];
         const fileData = fs.readFileSync(DATA_FILE, 'utf8');
         return JSON.parse(fileData);
     } catch (err) {
@@ -27,7 +24,6 @@ function readItemsFromFile() {
     }
 }
 
-// Helper function to safely write updates back to your file
 function writeItemsToFile(data) {
     try {
         fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2), 'utf8');
@@ -36,7 +32,6 @@ function writeItemsToFile(data) {
     }
 }
 
-// Serve the website layout directly on your main Render URL link
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
@@ -52,7 +47,7 @@ app.get('/api/prices', (req, res) => {
     res.json(filteredRows);
 });
 
-// Admin Modification & Add New Items Route
+// Admin Update/Add Route
 app.post('/api/prices/update', (req, res) => {
     const { item_id, item_name, buy_price, sell_price, password } = req.body;
 
@@ -64,13 +59,11 @@ app.post('/api/prices/update', (req, res) => {
     let item = items.find(i => i.item_id === item_id);
 
     if (item) {
-        // If item exists, update its pricing
         item.buy_price = parseFloat(buy_price);
         item.sell_price = parseFloat(sell_price);
         writeItemsToFile(items);
         res.json({ message: "🎯 Prices successfully updated in your items file!" });
     } else {
-        // If item is new, add it completely to the database list
         if (!item_name) {
             return res.status(400).json({ message: "❌ New items require an Item Name!" });
         }
@@ -84,6 +77,28 @@ app.post('/api/prices/update', (req, res) => {
         writeItemsToFile(items);
         res.json({ message: `✨ ${item_name} successfully added as a new item!` });
     }
+});
+
+// 🗑️ NEW: Admin Delete Item Route
+app.post('/api/prices/delete', (req, res) => {
+    const { item_id, password } = req.body;
+
+    if (password !== ADMIN_PASSWORD) {
+        return res.status(403).json({ message: "❌ Invalid Admin Password Access Denied!" });
+    }
+
+    let items = readItemsFromFile();
+    const initialLength = items.length;
+    
+    // Filter out the item to remove it completely
+    items = items.filter(i => i.item_id !== item_id);
+
+    if (items.length === initialLength) {
+        return res.status(404).json({ message: "❌ Item ID not found in file." });
+    }
+
+    writeItemsToFile(items);
+    res.json({ message: "🗑️ Item successfully wiped from the registry file!" });
 });
 
 app.listen(PORT, '0.0.0.0', () => {
