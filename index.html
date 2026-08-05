@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lunaria SMP - Economy Hub</title>
     <style>
-        /* 🌌 Deep Purple Space Gradient & Pure CSS Background Stars */
         body { 
             font-family: 'Segoe UI', system-ui, sans-serif; 
             background-color: #060214;
@@ -29,7 +28,6 @@
             overflow-x: hidden;
         }
 
-        /* 🌠 Pure CSS Falling Stars */
         .sky-meteor {
             position: fixed;
             height: 2px;
@@ -103,8 +101,13 @@
         .admin-trigger { margin-top: 40px; color: #a78bfa; background: none; border: none; cursor: pointer; font-size: 0.95rem; text-decoration: underline; opacity: 0.5; }
         .admin-trigger:hover { opacity: 1; }
         .admin-panel { display: none; margin-top: 30px; padding: 25px; background: rgba(7, 3, 15, 0.85); border-radius: 14px; border: 1px dashed rgba(168, 85, 247, 0.5); text-align: left; }
-        .admin-btn { background: #a855f7; border: none; color: white; padding: 12px 25px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.3s; font-size: 1rem; }
+        
+        .admin-btn { background: #a855f7; border: none; color: white; padding: 12px 25px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.3s; font-size: 1rem; margin-bottom: 15px; }
         .admin-btn:hover { background: #c084fc; }
+        
+        /* 🗑️ New red delete button styling */
+        .delete-btn { background: #ef4444; border: none; color: white; padding: 12px 25px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.3s; font-size: 1rem; }
+        .delete-btn:hover { background: #f87171; box-shadow: 0 0 15px rgba(239, 68, 68, 0.4); }
     </style>
 </head>
 <body>
@@ -127,10 +130,10 @@
             <h3 style="color: #c084fc; margin-top: 0;">Update / Add Server Items</h3>
             
             <label>Item Namespace ID:</label>
-            <input type="text" id="admin-item-id" placeholder="e.g. minecraft:emerald">
+            <input type="text" id="admin-item-id" placeholder="e.g. minecraft:diamond">
 
             <label>Display Name (Only needed when creating a new item):</label>
-            <input type="text" id="admin-item-name" placeholder="e.g. Emerald">
+            <input type="text" id="admin-item-name" placeholder="e.g. Diamond">
 
             <label>Buy Price ($):</label>
             <input type="number" id="admin-buy" placeholder="e.g. 150">
@@ -141,7 +144,11 @@
             <label>Secret Admin Password:</label>
             <input type="password" id="admin-pass" placeholder="Enter password...">
 
+            <!-- Green / Purple save option -->
             <button class="admin-btn" onclick="submitPriceUpdate()">Apply Changes to File</button>
+            
+            <!-- 🗑️ New red delete option -->
+            <button class="delete-btn" onclick="submitPriceDelete()">🗑️ Delete Item From Registry</button>
         </div>
     </div>
 
@@ -203,8 +210,30 @@
         }
     }
 
-    fetchPrices();
-</script>
-</body>
-</html>
+    async function submitPriceDelete() {
+        const item_id = document.getElementById('admin-item-id').value;
+        const password = document.getElementById('admin-pass').value;
 
+        if (!item_id || !password) {
+            alert("Please provide the Item Namespace ID and Password to delete!");
+            return;
+        }
+
+        if (!confirm(`Are you absolutely sure you want to delete ${item_id}?`)) {
+            return;
+        }
+
+        try {
+            const response = await fetch(API_URL + '/api/prices/delete', {
+                method: 'POST',
+headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ item_id, password })});
+            const result = await response.json();
+            alert(result.message);
+            fetchPrices();
+        } catch (err) {
+            alert("Error running deletion.");
+                      }
+                      }
+    
+    fetchPrices();
