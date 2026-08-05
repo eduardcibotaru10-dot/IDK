@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lunaria SMP - Economy Hub</title>
     <style>
-        /* 🌌 Pure CSS Space and Starry Background (Fail-Safe) */
+        /* 🌌 Pure CSS Space and Starry Background */
         body { 
             font-family: 'Segoe UI', system-ui, sans-serif; 
             background-color: #060214;
@@ -22,12 +22,59 @@
             padding: 40px 20px; 
             margin: 0;
             animation: cosmicShift 20s infinite alternate linear;
+            position: relative;
+            overflow-x: hidden;
         }
 
         /* Subtle background shimmer effect */
         @keyframes cosmicShift {
             0% { background-position: 0% 0%, 0% 0%, 0% 0%, 0% 0%; }
             100% { background-position: 20px 40px, -30px 10px, 10px -20px, 0% 0%; }
+        }
+
+        /* 🌠 Passing Stars Cluster Container */
+        .star-stream {
+            position: fixed;
+            top: -20px;
+            right: -20px;
+            width: 10px;
+            height: 10px;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Star styling with individual glow effects */
+        .cluster-star {
+            position: absolute;
+            background: #ffffff;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #c084fc, 0 0 15px #ffffff;
+            opacity: 0;
+            animation: driftLeft 8s infinite linear;
+        }
+
+        /* Position variations to make them look like a natural group of 1 to 4 stars */
+        .s1 { width: 3px; height: 3px; animation-delay: 0s; top: 10px; right: 10px; }
+        .s2 { width: 2px; height: 2px; animation-delay: 1.5s; top: 40px; right: 70px; }
+        .s3 { width: 4px; height: 4px; animation-delay: 3.2s; top: -10px; right: 130px; }
+        .s4 { width: 2px; height: 2px; animation-delay: 4.8s; top: 80px; right: 20px; }
+
+        /* Animation traveling from the top-right corner to the bottom-left corner */
+        @keyframes driftLeft {
+            0% {
+                transform: translate(0, 0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translate(-120vw, 100vh);
+                opacity: 0;
+            }
         }
 
         .banner-title { 
@@ -88,6 +135,14 @@
 </head>
 <body>
 
+    <!-- 🌌 Star stream container holding our animated group elements -->
+    <div class="star-stream">
+        <div class="cluster-star s1"></div>
+        <div class="cluster-star s2"></div>
+        <div class="cluster-star s3"></div>
+        <div class="cluster-star s4"></div>
+    </div>
+
     <div class="banner-title">LUNARIA</div>
     <div class="tagline">✦ Build • Explore • Connect ✦</div>
     
@@ -123,8 +178,8 @@
 <script>
     let currentData = [];
     
-    // Linked to your new live Render service address
-    const API_URL = "https://lunaria-prices.onrender.com"; 
+    // Linked to your live Render service address
+    const API_URL = "https://onrender.com"; 
 
     async function fetchPrices() {
         const query = document.getElementById('search').value;
@@ -171,15 +226,3 @@
             const result = await response.json();
             alert(result.message);
             if (response.ok) {
-                fetchPrices();
-            }
-        } catch (err) {
-            alert("Could not connect to the server.");
-        }
-    }
-
-    // Load initial price list values on startup
-    fetchPrices();
-</script>
-</body>
-</html>
