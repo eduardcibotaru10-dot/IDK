@@ -3,92 +3,200 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lunaria Market Network</title>
+    <title>Lunaria SMP - Economy Hub</title>
     <style>
-        body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: #0f0c1b; color: #f1edfa; text-align: center; padding: 40px 20px; margin: 0; }
-        .container { max-width: 750px; margin: 0 auto; background: #18132b; padding: 30px; border-radius: 16px; border: 1px solid #3d2b6b; box-shadow: 0 8px 32px rgba(15, 9, 30, 0.7); }
-        h1 { color: #a855f7; margin-top: 0; font-size: 2.2rem; text-shadow: 0 0 15px rgba(168, 85, 247, 0.4); letter-spacing: 1px; }
-        .subtitle { color: #a78bfa; margin-bottom: 30px; font-size: 0.95rem; opacity: 0.8; }
-        input { width: 90%; padding: 14px; margin-bottom: 25px; border-radius: 10px; border: 2px solid #3d2b6b; background: #221a3d; color: white; font-size: 16px; transition: 0.3s; }
-        input:focus { border-color: #a855f7; outline: none; box-shadow: 0 0 10px rgba(168, 85, 247, 0.3); }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { padding: 16px; border-bottom: 1px solid #2a1f44; text-align: left; }
-        th { background-color: #221a3d; color: #c084fc; font-weight: 600; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.5px; }
-        tr:hover { background-color: #241c42; cursor: pointer; }
-        .buy { color: #4ade80; font-weight: bold; }
-        .sell { color: #f87171; font-weight: bold; }
-        .stats-box { display: none; background: #221a3d; border: 1px dashed #a855f7; padding: 15px; margin-top: 20px; border-radius: 10px; text-align: left; }
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
-        .stat-card { background: #18132b; padding: 10px; border-radius: 6px; border: 1px solid #3d2b6b; }
-        .stat-card small { color: #a78bfa; display: block; margin-bottom: 4px; }
-        .stat-card span { font-size: 1.1rem; font-weight: bold; }
+        body { 
+            font-family: 'Segoe UI', system-ui, sans-serif; 
+            background: linear-gradient(135deg, #0b071e 0%, #170d3a 50%, #0b071e 100%);
+            color: #f1edfa; 
+            text-align: center; 
+            padding: 40px 20px; 
+            margin: 0;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+        /* Glowing Header elements */
+        .banner-title {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 5px;
+            text-shadow: 0 0 20px rgba(168, 85, 247, 0.8), 0 0 40px rgba(192, 132, 252, 0.4);
+            letter-spacing: 3px;
+        }
+        .tagline {
+            color: #d8b4fe;
+            font-size: 0.9rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+        /* Cosmic Glass Card Containers */
+        .container { 
+            max-width: 800px; 
+            margin: 0 auto; 
+            background: rgba(24, 15, 51, 0.65); 
+            padding: 35px; 
+            border-radius: 20px; 
+            border: 1px solid rgba(168, 85, 247, 0.25); 
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        /* Input Search Box Styling */
+        input { 
+            width: 90%; 
+            padding: 16px; 
+            margin-bottom: 30px; 
+            border-radius: 12px; 
+            border: 1px solid rgba(168, 85, 247, 0.4); 
+            background: rgba(15, 9, 36, 0.8); 
+            color: #fff; 
+            font-size: 16px; 
+            transition: all 0.3s ease;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+        }
+        input:focus { 
+            border-color: #c084fc; 
+            outline: none; 
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.5), inset 0 2px 4px rgba(0,0,0,0.5); 
+        }
+        /* Market Grid Items instead of raw flat tables */
+        .market-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+            margin-top: 10px;
+        }
+        .item-card {
+            background: rgba(36, 23, 74, 0.5);
+            border: 1px solid rgba(168, 85, 247, 0.15);
+            border-radius: 14px;
+            padding: 20px;
+            text-align: left;
+            transition: all 0.3s transform ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .item-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(168, 85, 247, 0.6);
+            background: rgba(43, 27, 89, 0.7);
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(168, 85, 247, 0.2);
+        }
+        .item-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 2px;
+        }
+        .item-namespace {
+            font-size: 0.75rem;
+            color: #a78bfa;
+            opacity: 0.6;
+            display: block;
+            margin-bottom: 15px;
+        }
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 6px;
+            font-size: 0.95rem;
+        }
+        .price-label { color: #cbd5e1; }
+        .buy-value { color: #4ade80; font-weight: 700; }
+        .sell-value { color: #f87171; font-weight: 700; }
+
+        /* Floating Stats Display Panel */
+        .stats-overlay { 
+            display: none; 
+            background: rgba(20, 11, 46, 0.95); 
+            border: 1px solid #a855f7; 
+            padding: 20px; 
+            margin-top: 25px; 
+            border-radius: 14px; 
+            text-align: left;
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.15);
+        }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 12px; }
+        .stat-node { background: rgba(36, 23, 74, 0.6); padding: 12px; border-radius: 8px; border: 1px solid rgba(168, 85, 247, 0.2); }
+        .stat-node small { color: #c084fc; display: block; margin-bottom: 4px; font-size: 0.8rem; text-transform: uppercase; }
+        .stat-node span { font-size: 1.2rem; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>🌙 LUNARIA MARKET</h1>
-    <div class="subtitle">Live Server Economy & Price Tracker</div>
+    <div class="banner-title">LUNARIA</div>
+    <div class="tagline">✦ Build • Explore • Connect ✦</div>
     
-    <input type="text" id="search" placeholder="Search Lunaria items (e.g., Diamond)..." oninput="fetchPrices()">
-    
-    <table>
-        <thead>
-            <tr>
-                <th>Item Details</th>
-                <th>Current Buy</th>
-                <th>Current Sell</th>
-            </tr>
-        </thead>
-        <tbody id="price-table"></tbody>
-    </table>
+    <div class="container">
+        <input type="text" id="search" placeholder="Search item registry (e.g., Diamond)..." oninput="fetchPrices()">
+        
+        <div class="market-grid" id="market-grid">
+            <!-- Cards populated dynamically -->
+        </div>
 
-    <div class="stats-box" id="stats-box">
-        <h3 style="margin-top:0; color:#c084fc;" id="stats-title">Item Statistics</h3>
-        <div class="stats-grid">
-            <div class="stat-card"><small>All-Time High</small><span id="stat-ath" style="color:#4ade80;">$0.00</span></div>
-            <div class="stat-card"><small>Last Price Trend</small><span id="stat-trend">Stable</span></div>
+        <div class="stats-overlay" id="stats-box">
+            <h3 style="margin-top:0; color:#c084fc; font-size: 1.3rem;" id="stats-title">Registry Insights</h3>
+            <div class="stats-grid">
+                <div class="stat-node"><small>All-Time Peak</small><span id="stat-ath" style="color:#4ade80;">$0.00</span></div>
+                <div class="stat-node"><small>Market Volatility</small><span id="stat-trend">Stable</span></div>
+            </div>
         </div>
     </div>
-</div>
 
 <script>
     let currentData = [];
+    
+    // Change this text value below to your exact live Render app URL string
+    const API_URL = "https://onrender.com"; 
 
     async function fetchPrices() {
         const query = document.getElementById('search').value;
-        // Points to local server during testing, change this URL later when hosting online
-        const response = await fetch(`https://lunaria-prices.onrender.com`);
-        currentData = await response.json();
-        
-        const tableBody = document.getElementById('price-table');
-        tableBody.innerHTML = ''; 
-        
-        currentData.forEach((item, index) => {
-            const row = `<tr onclick="showStats(${index})">
-                <td><strong>${item.item_name}</strong><br><small style="color:#a78bfa; opacity:0.6">${item.item_id}</small></td>
-                <td class="buy">$${item.buy_price.toFixed(2)}</td>
-                <td class="sell">$${item.sell_price.toFixed(2)}</td>
-            </tr>`;
-            tableBody.innerHTML += row;
-        });
+        try {
+            const response = await fetch(`${API_URL}/api/prices?search=${query}`);
+            currentData = await response.json();
+            
+            const grid = document.getElementById('market-grid');
+            grid.innerHTML = ''; 
+            
+            currentData.forEach((item, index) => {
+                const card = `
+                <div class="item-card" onclick="showStats(${index})">
+                    <div class="item-name">${item.item_name}</div>
+                    <span class="item-namespace">${item.item_id}</span>
+                    <div class="price-row">
+                        <span class="price-label">Buy:</span>
+                        <span class="buy-value">$${item.buy_price.toFixed(2)}</span>
+                    </div>
+                    <div class="price-row">
+                        <span class="price-label">Sell:</span>
+                        <span class="sell-value">$${item.sell_price.toFixed(2)}</span>
+                    </div>
+                </div>`;
+                grid.innerHTML += card;
+            });
+        } catch (err) {
+            console.error("Error communicating with cosmic server engine:", err);
+        }
     }
 
     function showStats(index) {
         const item = currentData[index];
-        document.getElementById('stats-title').innerText = `📊 ${item.item_name} Market History`;
+        document.getElementById('stats-title').innerText = `📊 ${item.item_name} Economic Tracking`;
         document.getElementById('stat-ath').innerText = `$${item.all_time_high.toFixed(2)}`;
         
         const trendSpan = document.getElementById('stat-trend');
         if (item.buy_price > item.old_price) {
-            trendSpan.innerText = "📈 RISING";
+            trendSpan.innerText = "📈 SPIKING";
             trendSpan.style.color = "#4ade80";
         } else if (item.buy_price < item.old_price) {
-            trendSpan.innerText = "📉 DROPPING";
+            trendSpan.innerText = "📉 PLUMMETING";
             trendSpan.style.color = "#f87171";
         } else {
-            trendSpan.innerText = "➡️ STABLE";
-            trendSpan.style.color = "#a78bfa";
+            trendSpan.innerText = "➡️ BALANCED";
+            trendSpan.style.color = "#c084fc";
         }
         
         document.getElementById('stats-box').style.display = 'block';
