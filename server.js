@@ -17,6 +17,7 @@ const db = new sqlite3.Database('prices.db', (err) => {
 });
 
 db.serialize(() => {
+    // Create the pricing table layout
     db.run(`CREATE TABLE IF NOT EXISTS prices (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         item_id TEXT NOT NULL UNIQUE,
@@ -27,11 +28,13 @@ db.serialize(() => {
         all_time_high REAL
     )`);
 
+    // Force populate the items right away if they don't exist yet!
     const insertStmt = db.prepare(`INSERT OR IGNORE INTO prices (item_id, item_name, buy_price, sell_price, old_price, all_time_high) VALUES (?, ?, ?, ?, ?, ?)`);
     insertStmt.run('minecraft:diamond', 'Diamond', 500.00, 150.00, 500.00, 500.00);
     insertStmt.run('minecraft:iron_ingot', 'Iron Ingot', 50.00, 15.00, 50.00, 50.00);
     insertStmt.run('minecraft:netherite_ingot', 'Netherite Ingot', 5000.00, 2000.00, 5000.00, 5000.00);
     insertStmt.finalize();
+    console.log("Database seeded successfully with default items.");
 });
 
 // Search Route
@@ -43,7 +46,7 @@ app.get('/api/prices', (req, res) => {
     });
 });
 
-// Admin Update Route with Password Protection
+// Admin Update Route
 app.post('/api/prices/update', (req, res) => {
     const { item_id, buy_price, sell_price, password } = req.body;
 
@@ -51,7 +54,6 @@ app.post('/api/prices/update', (req, res) => {
         return res.status(403).json({ message: "❌ Invalid Admin Password Access Denied!" });
     }
 
-    // First fetch current data to manage stats logic
     db.get(`SELECT buy_price, all_time_high FROM prices WHERE item_id = ?`, [item_id], (err, row) => {
         if (err || !row) return res.status(404).json({ message: "Item profile not found." });
 
