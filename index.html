@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lunaria Market Network</title>
+    <style>
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: #0f0c1b; color: #f1edfa; text-align: center; padding: 40px 20px; margin: 0; }
+        .container { max-width: 750px; margin: 0 auto; background: #18132b; padding: 30px; border-radius: 16px; border: 1px solid #3d2b6b; box-shadow: 0 8px 32px rgba(15, 9, 30, 0.7); }
+        h1 { color: #a855f7; margin-top: 0; font-size: 2.2rem; text-shadow: 0 0 15px rgba(168, 85, 247, 0.4); letter-spacing: 1px; }
+        .subtitle { color: #a78bfa; margin-bottom: 30px; font-size: 0.95rem; opacity: 0.8; }
+        input { width: 90%; padding: 14px; margin-bottom: 25px; border-radius: 10px; border: 2px solid #3d2b6b; background: #221a3d; color: white; font-size: 16px; transition: 0.3s; }
+        input:focus { border-color: #a855f7; outline: none; box-shadow: 0 0 10px rgba(168, 85, 247, 0.3); }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { padding: 16px; border-bottom: 1px solid #2a1f44; text-align: left; }
+        th { background-color: #221a3d; color: #c084fc; font-weight: 600; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.5px; }
+        tr:hover { background-color: #241c42; cursor: pointer; }
+        .buy { color: #4ade80; font-weight: bold; }
+        .sell { color: #f87171; font-weight: bold; }
+        .stats-box { display: none; background: #221a3d; border: 1px dashed #a855f7; padding: 15px; margin-top: 20px; border-radius: 10px; text-align: left; }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+        .stat-card { background: #18132b; padding: 10px; border-radius: 6px; border: 1px solid #3d2b6b; }
+        .stat-card small { color: #a78bfa; display: block; margin-bottom: 4px; }
+        .stat-card span { font-size: 1.1rem; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🌙 LUNARIA MARKET</h1>
+    <div class="subtitle">Live Server Economy & Price Tracker</div>
+    
+    <input type="text" id="search" placeholder="Search Lunaria items (e.g., Diamond)..." oninput="fetchPrices()">
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Item Details</th>
+                <th>Current Buy</th>
+                <th>Current Sell</th>
+            </tr>
+        </thead>
+        <tbody id="price-table"></tbody>
+    </table>
+
+    <div class="stats-box" id="stats-box">
+        <h3 style="margin-top:0; color:#c084fc;" id="stats-title">Item Statistics</h3>
+        <div class="stats-grid">
+            <div class="stat-card"><small>All-Time High</small><span id="stat-ath" style="color:#4ade80;">$0.00</span></div>
+            <div class="stat-card"><small>Last Price Trend</small><span id="stat-trend">Stable</span></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentData = [];
+
+    async function fetchPrices() {
+        const query = document.getElementById('search').value;
+        // Points to local server during testing, change this URL later when hosting online
+        const response = await fetch(`http://localhost:3000/api/prices?search=${query}`);
+        currentData = await response.json();
+        
+        const tableBody = document.getElementById('price-table');
+        tableBody.innerHTML = ''; 
+        
+        currentData.forEach((item, index) => {
+            const row = `<tr onclick="showStats(${index})">
+                <td><strong>${item.item_name}</strong><br><small style="color:#a78bfa; opacity:0.6">${item.item_id}</small></td>
+                <td class="buy">$${item.buy_price.toFixed(2)}</td>
+                <td class="sell">$${item.sell_price.toFixed(2)}</td>
+            </tr>`;
+            tableBody.innerHTML += row;
+        });
+    }
+
+    function showStats(index) {
+        const item = currentData[index];
+        document.getElementById('stats-title').innerText = `📊 ${item.item_name} Market History`;
+        document.getElementById('stat-ath').innerText = `$${item.all_time_high.toFixed(2)}`;
+        
+        const trendSpan = document.getElementById('stat-trend');
+        if (item.buy_price > item.old_price) {
+            trendSpan.innerText = "📈 RISING";
+            trendSpan.style.color = "#4ade80";
+        } else if (item.buy_price < item.old_price) {
+            trendSpan.innerText = "📉 DROPPING";
+            trendSpan.style.color = "#f87171";
+        } else {
+            trendSpan.innerText = "➡️ STABLE";
+            trendSpan.style.color = "#a78bfa";
+        }
+        
+        document.getElementById('stats-box').style.display = 'block';
+    }
+
+    fetchPrices();
+</script>
+</body>
+</html>
