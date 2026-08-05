@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,11 +6,9 @@
     <title>Lunaria SMP - Economy Hub</title>
 
     <style>
-        /* 🌌 Deep Purple Space Gradient & Pure CSS Background Stars */
         body {
             font-family: 'Segoe UI', system-ui, sans-serif;
             background-color: #060214;
-
             background-image:
                 radial-gradient(circle at 10% 10%, #ffffff 2px, transparent 2px),
                 radial-gradient(circle at 30% 20%, #ffffff 3px, transparent 3px),
@@ -22,7 +19,6 @@
                 radial-gradient(circle at 90% 30%, #ffffff 2px, transparent 2px),
                 radial-gradient(circle at 40% 85%, #ffffff 3px, transparent 3px),
                 linear-gradient(135deg, #0d0624 0%, #1a0f3c 45%, #060214 100%);
-
             color: #f1edfa;
             text-align: center;
             padding: 60px 20px;
@@ -33,7 +29,6 @@
             overflow-x: hidden;
         }
 
-        /* 🌠 Falling Stars */
         .sky-meteor {
             position: fixed;
             height: 2px;
@@ -93,7 +88,6 @@
             }
         }
 
-        /* 🌙 Header */
         .banner-title {
             font-size: 4rem;
             font-weight: 900;
@@ -115,7 +109,6 @@
             text-shadow: 0 0 10px rgba(168, 85, 247, 0.4);
         }
 
-        /* 📦 Main Container */
         .container {
             max-width: 850px;
             margin: 0 auto;
@@ -123,18 +116,14 @@
             padding: 40px;
             border-radius: 24px;
             border: 1px solid rgba(168, 85, 247, 0.4);
-
             box-shadow:
                 0 25px 60px rgba(0, 0, 0, 0.85),
                 inset 0 0 25px rgba(168, 85, 247, 0.15);
-
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
         }
 
-        /* 🔎 Inputs */
-        input,
-        select {
+        input {
             width: 92%;
             padding: 16px;
             margin-bottom: 25px;
@@ -146,14 +135,12 @@
             box-sizing: border-box;
         }
 
-        input:focus,
-        select:focus {
+        input:focus {
             outline: none;
             border-color: #c084fc;
             box-shadow: 0 0 12px rgba(168, 85, 247, 0.35);
         }
 
-        /* 🛒 Market */
         .market-grid {
             display: grid;
             grid-template-columns: repeat(
@@ -201,17 +188,11 @@
             font-size: 1.05rem;
         }
 
-        .buy-value {
+        .worth-value {
             color: #4ade80;
             font-weight: 700;
         }
 
-        .sell-value {
-            color: #f87171;
-            font-weight: 700;
-        }
-
-        /* ⚙️ Admin */
         .admin-trigger {
             margin-top: 40px;
             color: #a78bfa;
@@ -285,7 +266,6 @@
             box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
         }
 
-        /* 📱 Mobile */
         @media (max-width: 600px) {
             body {
                 padding: 30px 12px;
@@ -309,19 +289,15 @@
 
 <body>
 
-    <!-- 🌠 Falling meteors -->
     <div class="sky-meteor m1"></div>
     <div class="sky-meteor m2"></div>
     <div class="sky-meteor m3"></div>
 
-    <!-- 🌙 Header -->
     <div class="banner-title">LUNARIA</div>
     <div class="tagline">✦ Build • Explore • Connect ✦</div>
 
-    <!-- 📦 Main -->
     <div class="container">
 
-        <!-- 🔎 Search -->
         <input
             type="text"
             id="search"
@@ -329,10 +305,8 @@
             oninput="fetchPrices()"
         >
 
-        <!-- 🛒 Market -->
         <div class="market-grid" id="market-grid"></div>
 
-        <!-- ⚙️ Admin button -->
         <button
             class="admin-trigger"
             onclick="toggleAdminPanel()"
@@ -340,7 +314,6 @@
             ⚙️ Access Admin Price Management
         </button>
 
-        <!-- 🔐 Admin panel -->
         <div class="admin-panel" id="admin-panel">
 
             <h3>Update / Add Server Items</h3>
@@ -356,7 +329,7 @@
             >
 
             <label for="admin-item-name">
-                Display Name (Only needed when creating a new item):
+                Display Name:
             </label>
 
             <input
@@ -365,25 +338,14 @@
                 placeholder="e.g. Diamond"
             >
 
-            <label for="admin-buy">
-                Buy Price ($):
-            </label>
-
-            <input
-                type="number"
-                id="admin-buy"
-                placeholder="e.g. 150"
-                step="0.01"
-            >
-
             <label for="admin-sell">
-                New Sell Price ($):
+                Worth Price ($):
             </label>
 
             <input
                 type="number"
                 id="admin-sell"
-                placeholder="e.g. 40"
+                placeholder="e.g. 150"
                 step="0.01"
             >
 
@@ -415,15 +377,18 @@
     </div>
 
     <script>
+
         const API_URL = "https://lunaria-prices.onrender.com";
 
-        /* 🛒 Render market cards */
         function renderCards(items) {
-            const grid = document.getElementById("market-grid");
+
+            const grid =
+                document.getElementById("market-grid");
 
             grid.innerHTML = "";
 
             if (!Array.isArray(items) || items.length === 0) {
+
                 grid.innerHTML = `
                     <div style="
                         grid-column: 1 / -1;
@@ -439,75 +404,86 @@
 
             items.forEach(function(item) {
 
-                const card = document.createElement("div");
+                const card =
+                    document.createElement("div");
+
                 card.className = "item-card";
 
-                const itemName = document.createElement("div");
+                const itemName =
+                    document.createElement("div");
+
                 itemName.className = "item-name";
-                itemName.textContent = item.item_name || "Unknown Item";
 
-                const namespace = document.createElement("span");
-                namespace.className = "item-namespace";
-                namespace.textContent = item.item_id || "Unknown ID";
+                itemName.textContent =
+                    item.item_name || "Unknown Item";
 
-                const buyRow = document.createElement("div");
-                buyRow.className = "price-row";
+                const namespace =
+                    document.createElement("span");
 
-                buyRow.innerHTML = `
-                    <span>Buy:</span>
-                    <span class="buy-value">
-                        $${Number(item.buy_price || 0).toFixed(2)}
-                    </span>
-                `;
+                namespace.className =
+                    "item-namespace";
 
-                const sellRow = document.createElement("div");
-                sellRow.className = "price-row";
+                namespace.textContent =
+                    item.item_id || "Unknown ID";
 
-                sellRow.innerHTML = `
-                    <span>Sell:</span>
-                    <span class="sell-value">
+                const worthRow =
+                    document.createElement("div");
+
+                worthRow.className =
+                    "price-row";
+
+                worthRow.innerHTML = `
+                    <span>Worth:</span>
+
+                    <span class="worth-value">
                         $${Number(item.sell_price || 0).toFixed(2)}
                     </span>
                 `;
 
                 card.appendChild(itemName);
                 card.appendChild(namespace);
-                card.appendChild(buyRow);
-                card.appendChild(sellRow);
+                card.appendChild(worthRow);
 
                 grid.appendChild(card);
             });
         }
 
-        /* 🔎 Fetch prices */
         async function fetchPrices() {
 
-            const query = document
-                .getElementById("search")
-                .value
-                .trim();
+            const query =
+                document
+                    .getElementById("search")
+                    .value
+                    .trim();
 
             try {
 
-                const response = await fetch(
-                    API_URL +
-                    "/api/prices?search=" +
-                    encodeURIComponent(query)
-                );
+                const response =
+                    await fetch(
+                        API_URL +
+                        "/api/prices?search=" +
+                        encodeURIComponent(query)
+                    );
 
                 if (!response.ok) {
                     throw new Error("API request failed");
                 }
 
-                const data = await response.json();
+                const data =
+                    await response.json();
 
                 renderCards(data);
 
             } catch (err) {
 
-                console.error("Connection issue:", err);
+                console.error(
+                    "Connection issue:",
+                    err
+                );
 
-                document.getElementById("market-grid").innerHTML = `
+                document.getElementById(
+                    "market-grid"
+                ).innerHTML = `
                     <div style="
                         grid-column: 1 / -1;
                         padding: 30px;
@@ -519,7 +495,6 @@
             }
         }
 
-        /* ⚙️ Toggle admin panel */
         function toggleAdminPanel() {
 
             const panel =
@@ -532,60 +507,69 @@
             }
         }
 
-        /* ✏️ Update / create item */
         async function submitPriceUpdate() {
 
             const item_id =
-                document.getElementById("admin-item-id").value.trim();
+                document
+                    .getElementById("admin-item-id")
+                    .value
+                    .trim();
 
             const item_name =
-                document.getElementById("admin-item-name").value.trim();
-
-            const buy_price =
-                parseFloat(
-                    document.getElementById("admin-buy").value
-                );
+                document
+                    .getElementById("admin-item-name")
+                    .value
+                    .trim();
 
             const sell_price =
                 parseFloat(
-                    document.getElementById("admin-sell").value
+                    document
+                        .getElementById("admin-sell")
+                        .value
                 );
 
             const password =
-                document.getElementById("admin-pass").value;
+                document
+                    .getElementById("admin-pass")
+                    .value;
 
             if (
                 !item_id ||
-                isNaN(buy_price) ||
                 isNaN(sell_price) ||
                 !password
             ) {
-                alert("Please fill out all fields correctly!");
+
+                alert(
+                    "Please fill out all fields correctly!"
+                );
+
                 return;
             }
 
             try {
 
-                const response = await fetch(
-                    API_URL + "/api/prices/update",
-                    {
-                        method: "POST",
+                const response =
+                    await fetch(
+                        API_URL + "/api/prices/update",
+                        {
+                            method: "POST",
 
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
 
-                        body: JSON.stringify({
-                            item_id,
-                            item_name,
-                            buy_price,
-                            sell_price,
-                            password
-                        })
-                    }
-                );
+                            body: JSON.stringify({
+                                item_id,
+                                item_name,
+                                sell_price,
+                                password
+                            })
+                        }
+                    );
 
-                const result = await response.json();
+                const result =
+                    await response.json();
 
                 alert(
                     result.message ||
@@ -598,18 +582,24 @@
 
                 console.error(err);
 
-                alert("Error sending update.");
+                alert(
+                    "Error sending update."
+                );
             }
         }
 
-        /* 🗑️ Delete item */
         async function submitPriceDelete() {
 
             const item_id =
-                document.getElementById("admin-item-id").value.trim();
+                document
+                    .getElementById("admin-item-id")
+                    .value
+                    .trim();
 
             const password =
-                document.getElementById("admin-pass").value;
+                document
+                    .getElementById("admin-pass")
+                    .value;
 
             if (!item_id || !password) {
 
@@ -630,23 +620,26 @@
 
             try {
 
-                const response = await fetch(
-                    API_URL + "/api/prices/delete",
-                    {
-                        method: "POST",
+                const response =
+                    await fetch(
+                        API_URL + "/api/prices/delete",
+                        {
+                            method: "POST",
 
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
 
-                        body: JSON.stringify({
-                            item_id,
-                            password
-                        })
-                    }
-                );
+                            body: JSON.stringify({
+                                item_id,
+                                password
+                            })
+                        }
+                    );
 
-                const result = await response.json();
+                const result =
+                    await response.json();
 
                 alert(
                     result.message ||
@@ -659,14 +652,15 @@
 
                 console.error(err);
 
-                alert("Error running deletion.");
+                alert(
+                    "Error running deletion."
+                );
             }
         }
 
-        /* 🚀 Load prices immediately */
         fetchPrices();
-    </script>
 
+    </script>
 
 </body>
 </html>
