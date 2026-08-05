@@ -9,7 +9,6 @@
         body { 
             font-family: 'Segoe UI', system-ui, sans-serif; 
             background-color: #060214;
-            /* Layered radial gradients create permanent sharp stars in the sky background texture */
             background-image: 
                 radial-gradient(circle at 10% 10%, #ffffff 2px, transparent 2px),
                 radial-gradient(circle at 30% 20%, #ffffff 3px, transparent 3px),
@@ -30,7 +29,7 @@
             overflow-x: hidden;
         }
 
-        /* 🌠 Pure CSS Falling Stars (No Code Needed to Run!) */
+        /* 🌠 Pure CSS Falling Stars */
         .sky-meteor {
             position: fixed;
             height: 2px;
@@ -41,8 +40,6 @@
             pointer-events: none;
             z-index: -1;
         }
-
-        /* Fast and slow falling paths distributed across the screen */
         .m1 { top: 5%;  right: 10%; width: 80px;  animation-delay: 0s; }
         .m2 { top: 20%; right: 30%; width: 120px; animation-delay: 1.5s; animation-duration: 5s; }
         .m3 { top: 40%; right: 5%;  width: 60px;  animation-delay: 3s; animation-duration: 3s; }
@@ -50,7 +47,6 @@
         @keyframes moveMeteor {
             0% { transform: translate(0, 0) rotate(-45deg); opacity: 0; }
             10% { opacity: 1; }
-            90% { opacity: 1; }
             100% { transform: translate(-500px, 500px) rotate(-45deg); opacity: 0; }
         }
 
@@ -62,15 +58,7 @@
             text-shadow: 0 0 25px rgba(168, 85, 247, 0.9), 0 0 50px rgba(192, 132, 252, 0.5);
             letter-spacing: 6px;
         }
-        .tagline {
-            color: #d8b4fe;
-            font-size: 0.9rem;
-            letter-spacing: 5px;
-            text-transform: uppercase;
-            margin-bottom: 45px;
-            opacity: 0.85;
-            text-shadow: 0 0 10px rgba(168, 85, 247, 0.4);
-        }
+        .tagline { color: #d8b4fe; font-size: 0.9rem; letter-spacing: 5px; text-transform: uppercase; margin-bottom: 45px; opacity: 0.85; }
 
         .container { 
             max-width: 850px; 
@@ -115,13 +103,12 @@
         .admin-trigger { margin-top: 40px; color: #a78bfa; background: none; border: none; cursor: pointer; font-size: 0.95rem; text-decoration: underline; opacity: 0.5; }
         .admin-trigger:hover { opacity: 1; }
         .admin-panel { display: none; margin-top: 30px; padding: 25px; background: rgba(7, 3, 15, 0.85); border-radius: 14px; border: 1px dashed rgba(168, 85, 247, 0.5); text-align: left; }
-        .admin-btn { background: #a855f7; border: none; color: white; padding: 14px 25px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.3s; font-size: 1rem; }
+        .admin-btn { background: #a855f7; border: none; color: white; padding: 12px 25px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.3s; font-size: 1rem; }
         .admin-btn:hover { background: #c084fc; }
     </style>
 </head>
 <body>
 
-    <!-- Falling Meteor Elements -->
     <div class="sky-meteor m1"></div>
     <div class="sky-meteor m2"></div>
     <div class="sky-meteor m3"></div>
@@ -132,36 +119,34 @@
     <div class="container">
         <input type="text" id="search" placeholder="Search item registry (e.g., Diamond)..." oninput="fetchPrices()">
         
-        <!-- The item grid where our cards display -->
         <div class="market-grid" id="market-grid"></div>
 
         <button class="admin-trigger" onclick="toggleAdminPanel()">⚙️ Access Admin Price Management</button>
         
         <div class="admin-panel" id="admin-panel">
-            <h3 style="color: #c084fc; margin-top: 0;">Update Server Item Prices</h3>
-            <label>Select Item Namespace ID:</label>
-            <select id="admin-item-id">
-                <option value="minecraft:diamond">minecraft:diamond (Diamond)</option>
-                <option value="minecraft:iron_ingot">minecraft:iron_ingot (Iron Ingot)</option>
-                <option value="minecraft:netherite_ingot">minecraft:netherite_ingot (Netherite Ingot)</option>
-            </select>
+            <h3 style="color: #c084fc; margin-top: 0;">Update / Add Server Items</h3>
+            
+            <label>Item Namespace ID:</label>
+            <input type="text" id="admin-item-id" placeholder="e.g. minecraft:emerald">
 
-            <label>New Buy Price ($):</label>
-            <input type="number" id="admin-buy" placeholder="e.g. 550">
+            <label>Display Name (Only needed when creating a new item):</label>
+            <input type="text" id="admin-item-name" placeholder="e.g. Emerald">
+
+            <label>Buy Price ($):</label>
+            <input type="number" id="admin-buy" placeholder="e.g. 150">
 
             <label>New Sell Price ($):</label>
-            <input type="number" id="admin-sell" placeholder="e.g. 175">
+            <input type="number" id="admin-sell" placeholder="e.g. 40">
 
             <label>Secret Admin Password:</label>
             <input type="password" id="admin-pass" placeholder="Enter password...">
 
-            <button class="admin-btn" onclick="submitPriceUpdate()">Apply Price Update</button>
+            <button class="admin-btn" onclick="submitPriceUpdate()">Apply Changes to File</button>
         </div>
     </div>
 
 <script>
-    let currentData = [];
-    const API_URL = "https://onrender.com"; 
+    const API_URL = ""; 
 
     function renderCards(items) {
         const grid = document.getElementById('market-grid');
@@ -194,12 +179,13 @@
 
     async function submitPriceUpdate() {
         const item_id = document.getElementById('admin-item-id').value;
+        const item_name = document.getElementById('admin-item-name').value;
         const buy_price = parseFloat(document.getElementById('admin-buy').value);
         const sell_price = parseFloat(document.getElementById('admin-sell').value);
         const password = document.getElementById('admin-pass').value;
 
-        if (isNaN(buy_price) || isNaN(sell_price) || !password) {
-            alert("Please fill out all fields!");
+        if (!item_id || isNaN(buy_price) || isNaN(sell_price) || !password) {
+            alert("Please fill out all fields correctly!");
             return;
         }
 
@@ -207,7 +193,7 @@
             const response = await fetch(API_URL + '/api/prices/update', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ item_id, buy_price, sell_price, password })
+                body: JSON.stringify({ item_id, item_name, buy_price, sell_price, password })
             });
             const result = await response.json();
             alert(result.message);
@@ -217,8 +203,8 @@
         }
     }
 
-    // Force cards to populate instantly on load
     fetchPrices();
 </script>
 </body>
 </html>
+
