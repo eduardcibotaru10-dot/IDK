@@ -1,21 +1,28 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// This is your live password to change prices on the site!
 const ADMIN_PASSWORD = "LunariaSecret123!";
 
 app.use(cors());
 app.use(express.json());
 
-// Safe in-memory database storage system (Immune to Render storage wipe resets)
+// 1. This tells the server to look for your index.html file in your folder
+app.use(express.static(__dirname));
+
 let currentPrices = [
     { item_id: 'minecraft:diamond', item_name: 'Diamond', buy_price: 500.00, sell_price: 150.00 },
     { item_id: 'minecraft:iron_ingot', item_name: 'Iron Ingot', buy_price: 50.00, sell_price: 15.00 },
-    { item_id: 'minecraft:netherite_ingot', item_name: 'Netherite Ingot', buy_price: 5000.00, sell_price: 2000.00 }
+    { item_id: 'minecraft:netherite_ingot', 'item_name': 'Netherite Ingot', buy_price: 5000.00, sell_price: 2000.00 }
 ];
+
+// 2. This serves the main website whenever someone visits your Render link directly
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
 
 // Search Route
 app.get('/api/prices', (req, res) => {
@@ -49,4 +56,5 @@ app.post('/api/prices/update', (req, res) => {
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server running on port ${PORT}`);
 });
+
 
