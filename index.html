@@ -58,7 +58,7 @@
     async function fetchPrices() {
         const query = document.getElementById('search').value;
         // Points to local server during testing, change this URL later when hosting online
-        const response = await fetch(`http://localhost:3000/api/prices?search=${query}`);
+        const response = await fetch(`https://lunaria-prices.onrender.com`);
         currentData = await response.json();
         
         const tableBody = document.getElementById('price-table');
