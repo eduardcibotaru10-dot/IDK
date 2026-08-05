@@ -1,34 +1,22 @@
 const express = require('express');
 const cors = require('cors');
-const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 const ADMIN_PASSWORD = "LunariaSecret123!";
 
-// This configures advanced, ironclad headers allowing the frontend data to load cleanly
-app.use(cors({
-    origin: '*',
-    methods: ['GET', 'POST'],
-    allowedHeaders: ['Content-Type']
-}));
-
+app.use(cors());
 app.use(express.json());
-app.use(express.static(__dirname));
 
-// Safe memory storage container
+// Cloud-Safe Memory Storage
 let currentPrices = [
     { item_id: 'minecraft:diamond', item_name: 'Diamond', buy_price: 500.00, sell_price: 150.00 },
     { item_id: 'minecraft:iron_ingot', item_name: 'Iron Ingot', buy_price: 50.00, sell_price: 15.00 },
     { item_id: 'minecraft:netherite_ingot', item_name: 'Netherite Ingot', buy_price: 5000.00, sell_price: 2000.00 }
 ];
 
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
-});
-
-// Search API Endpoint
+// Search Route
 app.get('/api/prices', (req, res) => {
     const query = req.query.search ? req.query.search.toLowerCase() : '';
     const filteredRows = currentPrices.filter(item => 
@@ -38,7 +26,7 @@ app.get('/api/prices', (req, res) => {
     res.json(filteredRows);
 });
 
-// Admin Price Update Endpoint
+// Admin Update Route
 app.post('/api/prices/update', (req, res) => {
     const { item_id, buy_price, sell_price, password } = req.body;
 
@@ -51,6 +39,7 @@ app.post('/api/prices/update', (req, res) => {
         return res.status(404).json({ message: "Item profile not found." });
     }
 
+    item.old_price = item.buy_price;
     item.buy_price = parseFloat(buy_price);
     item.sell_price = parseFloat(sell_price);
 
@@ -60,5 +49,3 @@ app.post('/api/prices/update', (req, res) => {
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server running on port ${PORT}`);
 });
-
-
