@@ -160,13 +160,7 @@
     </div>
 
 <script>
-    // Hardcoded static backup data. If the server fails, it forces these to load right away!
-    const fallbackData = [
-        { item_id: 'minecraft:diamond', item_name: 'Diamond', buy_price: 500.00, sell_price: 150.00 },
-        { item_id: 'minecraft:iron_ingot', item_name: 'Iron Ingot', buy_price: 50.00, sell_price: 15.00 },
-        { item_id: 'minecraft:netherite_ingot', item_name: 'Netherite Ingot', buy_price: 5000.00, sell_price: 2000.00 }
-    ];
-
+    let currentData = [];
     const API_URL = "https://onrender.com"; 
 
     function renderCards(items) {
@@ -187,14 +181,9 @@
         try {
             const response = await fetch(API_URL + '/api/prices?search=' + query);
             const data = await response.json();
-            if (data && data.length > 0) {
-                renderCards(data);
-            } else {
-                renderCards(fallbackData);
-            }
+            renderCards(data);
         } catch (err) { 
-            console.log("Using backup visual mode.");
-            renderCards(fallbackData); 
+            console.log("Connection issue.");
         }
     }
 
@@ -225,4 +214,11 @@
             fetchPrices();
         } catch (err) {
             alert("Error sending update.");
-        } Force cards to populate instantly on loadfetchPrices();
+        }
+    }
+
+    // Force cards to populate instantly on load
+    fetchPrices();
+</script>
+</body>
+</html>
