@@ -103,7 +103,7 @@
         input, select { 
             width: 90%; 
             padding: 16px; 
-            margin-bottom: 30px; 
+            margin-bottom: 25px; 
             border-radius: 12px; 
             border: 1px solid rgba(168, 85, 247, 0.4); 
             background: rgba(10, 6, 26, 0.9); 
@@ -194,51 +194,48 @@
 
 <script>
     let currentData = [];
-    // CHANGE THIS text below to your exact live Render URL string!
-    const API_URL = "https://lunaria-prices.onrender.com"; 
+    // CHANGE THIS URL string below to your exact live Render app URL string!
+    const API_URL = "https://onrender.com"; 
 
     // Generate Background Stars dynamically
     function generateStarrySky() {
         const container = document.getElementById('stars-container');
-        const starCount = 100; // Total background stars
+        if(!container) return;
+        const starCount = 100;
 
         for (let i = 0; i < starCount; i++) {
             const star = document.createElement('div');
             star.classList.add('star');
             
-            // Randomize position, size, and twinkle speed
             const size = Math.random() * 2 + 1;
-            star.style.width = `${size}px`;
-            star.style.height = `${size}px`;
-            star.style.top = `${Math.random() * 100}%`;
-            star.style.left = `${Math.random() * 100}%`;
-            star.style.setProperty('--duration', `${Math.random() * 3 + 2}s`);
+            star.style.width = size + 'px';
+            star.style.height = size + 'px';
+            star.style.top = (Math.random() * 100) + '%';
+            star.style.left = (Math.random() * 100) + '%';
+            star.style.setProperty('--duration', (Math.random() * 3 + 2) + 's');
             
             container.appendChild(star);
         }
     }
 
-    // Spawn Shooting Stars from time to time
+    // Spawn Shooting Stars
     function spawnShootingStar() {
-        const body = document.body;
         const star = document.createElement('div');
         star.classList.add('shooting-star');
 
-        // Set starting points and distances randomly
         const startX = Math.random() * window.innerWidth;
-        const startY = Math.random() * (window.innerHeight / 2); // Top half of screen
-        const duration = Math.random() * 1.5 + 1; // 1 to 2.5 seconds flight speed
+        const startY = Math.random() * (window.innerHeight / 2);
+        const duration = Math.random() * 1.5 + 1;
 
-        star.style.setProperty('--start-x', `${startX}px`);
-        star.style.setProperty('--start-y', `${startY}px`);
-        star.style.setProperty('--travel-x', `${Math.random() * 300 + 200}px`);
-        star.style.setProperty('--travel-y', `${Math.random() * 300 + 200}px`);
-        star.style.setProperty('--duration', `${duration}s`);
+        star.style.setProperty('--start-x', startX + 'px');
+        star.style.setProperty('--start-y', startY + 'px');
+        star.style.setProperty('--travel-x', (Math.random() * 300 + 200) + 'px');
+        star.style.setProperty('--travel-y', (Math.random() * 300 + 200) + 'px');
+        star.style.setProperty('--duration', duration + 's');
 
-        body.appendChild(star);
+        document.body.appendChild(star);
 
-        // Delete the HTML star after its animation finishes flying
-        setTimeout(() => {
+        setTimeout(function() {
             star.remove();
         }, duration * 1000);
     }
@@ -246,13 +243,17 @@
     async function fetchPrices() {
         const query = document.getElementById('search').value;
         try {
-            const response = await fetch(`${API_URL}/api/prices?search=${query}`);
+            const response = await fetch(API_URL + '/api/prices?search=' + query);
             currentData = await response.json();
             const grid = document.getElementById('market-grid');
             grid.innerHTML = ''; 
             
-            currentData.forEach((item) => {
-                grid.innerHTML += `
-                <div class="item-card">
-                    <div class="item-name">${item.item_name}</div>
-                    <span class="item-namespace">${item.item_id}</span>
+            currentData.forEach(function(item) {
+                grid.innerHTML += '<div class="item-card">' +
+                    '<div class="item-name">' + item.item_name + '</div>' +
+                    '<span class="item-namespace">' + item.item_id + '</span>' +
+                    '<div class="price-row"><span>Buy:</span><span class="buy-value">$' + item.buy_price.toFixed(2) + '</span></div>' +
+                    '<div class="price-row"><span>Sell:</span><span class="sell-value">$' + item.sell_price.toFixed(2) + '</span></div>' +
+                '</div>';
+            });
+        } catch (err) { console.error(err); }
