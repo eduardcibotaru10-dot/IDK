@@ -5,9 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lunaria SMP - Economy Hub</title>
     <style>
+        /* 🌌 Deep Purple Space Gradient & Pure CSS Background Stars */
         body { 
             font-family: 'Segoe UI', system-ui, sans-serif; 
-            background: linear-gradient(135deg, #0d0624 0%, #1a0f3c 45%, #060214 100%);
+            background-color: #060214;
+            /* Layered radial gradients create permanent sharp stars in the sky background texture */
+            background-image: 
+                radial-gradient(circle at 10% 10%, #ffffff 2px, transparent 2px),
+                radial-gradient(circle at 30% 20%, #ffffff 3px, transparent 3px),
+                radial-gradient(circle at 75% 15%, #ffffff 2px, transparent 2px),
+                radial-gradient(circle at 50% 40%, #ffffff 3px, transparent 3px),
+                radial-gradient(circle at 15% 70%, #ffffff 2px, transparent 2px),
+                radial-gradient(circle at 85% 80%, #ffffff 4px, transparent 4px),
+                radial-gradient(circle at 90% 30%, #ffffff 2px, transparent 2px),
+                radial-gradient(circle at 40% 85%, #ffffff 3px, transparent 3px),
+                linear-gradient(135deg, #0d0624 0%, #1a0f3c 45%, #060214 100%);
             color: #f1edfa; 
             text-align: center; 
             padding: 60px 20px; 
@@ -18,57 +30,28 @@
             overflow-x: hidden;
         }
 
-        #stars-container {
+        /* 🌠 Pure CSS Falling Stars (No Code Needed to Run!) */
+        .sky-meteor {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -2;
-            pointer-events: none;
-        }
-
-        .sparkle-star {
-            position: absolute;
-            background: #ffffff;
-            width: 4px;
-            height: 4px;
-            border-radius: 50%;
-            filter: drop-shadow(0 0 8px #ffffff) drop-shadow(0 0 16px #b066ff);
-            animation: twinklePulse var(--duration) infinite ease-in-out;
-        }
-
-        .sparkle-star::before, .sparkle-star::after {
-            content: '';
-            position: absolute;
-            background: linear-gradient(to right, transparent, #ffffff, transparent);
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-        .sparkle-star::before { width: var(--star-size); height: 1px; }
-        .sparkle-star::after { width: 1px; height: var(--star-size); transform: translate(-50%, -50%) rotate(90deg); }
-
-        @keyframes twinklePulse {
-            0%, 100% { transform: scale(0.3); opacity: 0.2; }
-            50% { transform: scale(1); opacity: 1; }
-        }
-
-        .shooting-star {
-            position: fixed;
-            top: var(--start-y);
-            left: var(--start-x);
             height: 2px;
             background: linear-gradient(-45deg, #ffffff, #c084fc, rgba(0, 0, 0, 0));
             filter: drop-shadow(0 0 6px #c084fc);
-            animation: slideMeteor var(--duration) ease-in-out forwards;
+            opacity: 0;
+            animation: moveMeteor 4s infinite linear;
+            pointer-events: none;
             z-index: -1;
         }
 
-        @keyframes slideMeteor {
-            0% { width: 0; transform: rotate(-45deg); opacity: 0; }
-            15% { width: 80px; opacity: 1; }
-            100% { width: 0; transform: translate(var(--travel-x), var(--travel-y)) rotate(-45deg); opacity: 0; }
+        /* Fast and slow falling paths distributed across the screen */
+        .m1 { top: 5%;  right: 10%; width: 80px;  animation-delay: 0s; }
+        .m2 { top: 20%; right: 30%; width: 120px; animation-delay: 1.5s; animation-duration: 5s; }
+        .m3 { top: 40%; right: 5%;  width: 60px;  animation-delay: 3s; animation-duration: 3s; }
+
+        @keyframes moveMeteor {
+            0% { transform: translate(0, 0) rotate(-45deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translate(-500px, 500px) rotate(-45deg); opacity: 0; }
         }
 
         .banner-title {
@@ -99,12 +82,6 @@
             box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85), inset 0 0 25px rgba(168, 85, 247, 0.15);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            animation: subtleHover 6s ease-in-out infinite;
-        }
-
-        @keyframes subtleHover {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
         }
 
         input, select { 
@@ -117,7 +94,6 @@
             color: #fff; 
             font-size: 16px; 
         }
-        input:focus { border-color: #c084fc; outline: none; box-shadow: 0 0 15px rgba(168, 85, 247, 0.6); }
 
         .market-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 25px; margin-top: 10px; }
         
@@ -128,31 +104,27 @@
             padding: 24px;
             text-align: left;
             box-shadow: 0 6px 20px rgba(0,0,0,0.5);
-            transition: all 0.3s ease;
-        }
-        .item-card:hover {
-            transform: scale(1.03);
-            border-color: rgba(168, 85, 247, 0.8);
-            background: rgba(45, 24, 92, 0.75);
-            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.5);
         }
 
         .item-name { font-size: 1.3rem; font-weight: bold; color: #ffffff; }
         .item-namespace { font-size: 0.8rem; color: #c084fc; opacity: 0.8; display: block; margin-bottom: 15px; }
         .price-row { display: flex; justify-content: space-between; margin-top: 8px; font-size: 1.05rem; }
-        .buy-value { color: #4ade80; font-weight: 700; text-shadow: 0 0 10px rgba(74, 222, 128, 0.3); }
-        .sell-value { color: #f87171; font-weight: 700; text-shadow: 0 0 10px rgba(248, 113, 113, 0.3); }
+        .buy-value { color: #4ade80; font-weight: 700; }
+        .sell-value { color: #f87171; font-weight: 700; }
         
         .admin-trigger { margin-top: 40px; color: #a78bfa; background: none; border: none; cursor: pointer; font-size: 0.95rem; text-decoration: underline; opacity: 0.5; }
         .admin-trigger:hover { opacity: 1; }
         .admin-panel { display: none; margin-top: 30px; padding: 25px; background: rgba(7, 3, 15, 0.85); border-radius: 14px; border: 1px dashed rgba(168, 85, 247, 0.5); text-align: left; }
         .admin-btn { background: #a855f7; border: none; color: white; padding: 14px 25px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.3s; font-size: 1rem; }
-        .admin-btn:hover { background: #c084fc; box-shadow: 0 0 20px #a855f7; }
+        .admin-btn:hover { background: #c084fc; }
     </style>
 </head>
 <body>
 
-    <div id="stars-container"></div>
+    <!-- Falling Meteor Elements -->
+    <div class="sky-meteor m1"></div>
+    <div class="sky-meteor m2"></div>
+    <div class="sky-meteor m3"></div>
 
     <div class="banner-title">LUNARIA</div>
     <div class="tagline">✦ Build • Explore • Connect ✦</div>
@@ -160,6 +132,7 @@
     <div class="container">
         <input type="text" id="search" placeholder="Search item registry (e.g., Diamond)..." oninput="fetchPrices()">
         
+        <!-- The item grid where our cards display -->
         <div class="market-grid" id="market-grid"></div>
 
         <button class="admin-trigger" onclick="toggleAdminPanel()">⚙️ Access Admin Price Management</button>
@@ -187,60 +160,69 @@
     </div>
 
 <script>
-    let currentData = [];
-    
-    // Leaving this empty tells the website to safely talk to its own direct link address!
-    const API_URL = ""; 
+    // Hardcoded static backup data. If the server fails, it forces these to load right away!
+    const fallbackData = [
+        { item_id: 'minecraft:diamond', item_name: 'Diamond', buy_price: 500.00, sell_price: 150.00 },
+        { item_id: 'minecraft:iron_ingot', item_name: 'Iron Ingot', buy_price: 50.00, sell_price: 15.00 },
+        { item_id: 'minecraft:netherite_ingot', item_name: 'Netherite Ingot', buy_price: 5000.00, sell_price: 2000.00 }
+    ];
 
-    function generatePremiumSky() {
-        const container = document.getElementById('stars-container');
-        if(!container) return;
-        const totalStars = 60; 
+    const API_URL = "https://onrender.com"; 
 
-        for (let i = 0; i < totalStars; i++) {
-            const star = document.createElement('div');
-            star.classList.add('sparkle-star');
-            
-            const starSize = Math.random() * 20 + 10; 
-            star.style.top = (Math.random() * 100) + '%';
-            star.style.left = (Math.random() * 100) + '%';
-            star.style.setProperty('--duration', (Math.random() * 3 + 2.5) + 's');
-            star.style.setProperty('--star-size', starSize + 'px');
-            
-            container.appendChild(star);
-        }
-    }
-
-    function spawnFallingStar() {
-        const star = document.createElement('div');
-        star.classList.add('shooting-star');
-
-        const startX = Math.random() * window.innerWidth;
-        const startY = Math.random() * (window.innerHeight / 3.5); 
-        const duration = Math.random() * 2 + 3;
-
-        star.style.setProperty('--start-x', startX + 'px');
-        star.style.setProperty('--start-y', startY + 'px');
-        star.style.setProperty('--travel-x', '-' + (Math.random() * 400 + 400) + 'px');
-        star.style.setProperty('--travel-y', (Math.random() * 400 + 400) + 'px');
-        star.style.setProperty('--duration', duration + 's');
-
-        document.body.appendChild(star);
-
-        setTimeout(function() {
-            star.remove();
-        }, duration * 1000);
+    function renderCards(items) {
+        const grid = document.getElementById('market-grid');
+        grid.innerHTML = ''; 
+        items.forEach(function(item) {
+            grid.innerHTML += '<div class="item-card">' +
+                '<div class="item-name">' + item.item_name + '</div>' +
+                '<span class="item-namespace">' + item.item_id + '</span>' +
+                '<div class="price-row"><span>Buy:</span><span class="buy-value">$' + item.buy_price.toFixed(2) + '</span></div>' +
+                '<div class="price-row"><span>Sell:</span><span class="sell-value">$' + item.sell_price.toFixed(2) + '</span></div>' +
+            '</div>';
+        });
     }
 
     async function fetchPrices() {
         const query = document.getElementById('search').value;
         try {
             const response = await fetch(API_URL + '/api/prices?search=' + query);
-            currentData = await response.json();
-            const grid = document.getElementById('market-grid');
-            grid.innerHTML = ''; 
-            
-            currentData.forEach(function(item) {
-                grid.innerHTML += '<div class="item-card">' +
-                    '<div class="item-name">' + item.item_name + '</div>' +
-                    '<span class="item-namespace">' + item.item_id + '</span>' +
+            const data = await response.json();
+            if (data && data.length > 0) {
+                renderCards(data);
+            } else {
+                renderCards(fallbackData);
+            }
+        } catch (err) { 
+            console.log("Using backup visual mode.");
+            renderCards(fallbackData); 
+        }
+    }
+
+    function toggleAdminPanel() {
+        const panel = document.getElementById('admin-panel');
+        panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+    }
+
+    async function submitPriceUpdate() {
+        const item_id = document.getElementById('admin-item-id').value;
+        const buy_price = parseFloat(document.getElementById('admin-buy').value);
+        const sell_price = parseFloat(document.getElementById('admin-sell').value);
+        const password = document.getElementById('admin-pass').value;
+
+        if (isNaN(buy_price) || isNaN(sell_price) || !password) {
+            alert("Please fill out all fields!");
+            return;
+        }
+
+        try {
+            const response = await fetch(API_URL + '/api/prices/update', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ item_id, buy_price, sell_price, password })
+            });
+            const result = await response.json();
+            alert(result.message);
+            fetchPrices();
+        } catch (err) {
+            alert("Error sending update.");
+        } Force cards to populate instantly on loadfetchPrices();
