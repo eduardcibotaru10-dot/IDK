@@ -7,157 +7,33 @@
     <style>
         body { 
             font-family: 'Segoe UI', system-ui, sans-serif; 
-            background: linear-gradient(135deg, #050212 0%, #0c0624 50%, #050212 100%);
+            background: #0b071e;
             color: #f1edfa; 
             text-align: center; 
             padding: 40px 20px; 
             margin: 0;
-            min-height: 100vh;
-            background-attachment: fixed;
-            position: relative;
-            overflow-x: hidden;
         }
-
-        /* 🌌 Starry Sky Background Layers */
-        #stars-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -2;
-            pointer-events: none;
-        }
-
-        .star {
-            position: absolute;
-            background-color: #ffffff;
-            border-radius: 50%;
-            animation: twinkle var(--duration) infinite ease-in-out;
-        }
-
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.2; }
-            50% { opacity: 1; }
-        }
-
-        /* 🌠 Shooting Star Animation Styles */
-        .shooting-star {
-            position: fixed;
-            top: var(--start-y);
-            left: var(--start-x);
-            height: 2px;
-            background: linear-gradient(-45deg, #a855f7, rgba(0, 0, 0, 0));
-            filter: drop-shadow(0 0 6px #c084fc);
-            animation: shoot var(--duration) ease-in-out forwards;
-            z-index: -1;
-            pointer-events: none;
-        }
-
-        @keyframes shoot {
-            0% {
-                width: 0;
-                transform: translateX(0) translateY(0) rotate(-45deg);
-                opacity: 1;
-            }
-            10% {
-                width: 100px;
-            }
-            100% {
-                width: 0;
-                transform: translateX(var(--travel-x)) translateY(var(--travel-y)) rotate(-45deg);
-                opacity: 0;
-            }
-        }
-
-        /* Glowing Header elements */
-        .banner-title {
-            font-size: 3rem;
-            font-weight: 800;
-            color: #ffffff;
-            margin-bottom: 5px;
-            text-shadow: 0 0 20px rgba(168, 85, 247, 0.8), 0 0 40px rgba(192, 132, 252, 0.4);
-            letter-spacing: 3px;
-        }
-        .tagline {
-            color: #d8b4fe;
-            font-size: 0.9rem;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            margin-bottom: 40px;
-            opacity: 0.9;
-        }
-        /* Cosmic Glass Card Containers */
-        .container { 
-            max-width: 800px; 
-            margin: 0 auto; 
-            background: rgba(18, 11, 40, 0.75); 
-            padding: 35px; 
-            border-radius: 20px; 
-            border: 1px solid rgba(168, 85, 247, 0.3); 
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-        }
-        /* Input Search Box Styling */
-        input, select { 
-            width: 90%; 
-            padding: 16px; 
-            margin-bottom: 25px; 
-            border-radius: 12px; 
-            border: 1px solid rgba(168, 85, 247, 0.4); 
-            background: rgba(10, 6, 26, 0.9); 
-            color: #fff; 
-            font-size: 16px; 
-            transition: all 0.3s ease;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
-        }
-        input:focus { 
-            border-color: #c084fc; 
-            outline: none; 
-            box-shadow: 0 0 15px rgba(168, 85, 247, 0.5), inset 0 2px 4px rgba(0,0,0,0.5); 
-        }
-        /* Market Grid Items */
-        .market-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 20px;
-            margin-top: 10px;
-        }
-        .item-card {
-            background: rgba(30, 18, 64, 0.5);
-            border: 1px solid rgba(168, 85, 247, 0.2);
-            border-radius: 14px;
-            padding: 20px;
-            text-align: left;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-        .item-card:hover {
-            transform: translateY(-4px);
-            border-color: rgba(168, 85, 247, 0.7);
-            background: rgba(40, 24, 84, 0.7);
-            cursor: pointer;
-            box-shadow: 0 8px 25px rgba(168, 85, 247, 0.3);
-        }
+        .banner-title { font-size: 3rem; font-weight: 800; color: #ffffff; text-shadow: 0 0 20px rgba(168, 85, 247, 0.8); letter-spacing: 3px; margin-bottom: 5px; }
+        .tagline { color: #d8b4fe; font-size: 0.9rem; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 40px; }
+        .container { max-width: 800px; margin: 0 auto; background: rgba(24, 15, 51, 0.85); padding: 35px; border-radius: 20px; border: 1px solid rgba(168, 85, 247, 0.25); box-shadow: 0 12px 40px rgba(0,0,0,0.6); }
+        input, select { width: 90%; padding: 14px; margin-bottom: 25px; border-radius: 10px; border: 1px solid rgba(168, 85, 247, 0.4); background: #0f0924; color: #fff; font-size: 16px; }
+        input:focus { border-color: #c084fc; outline: none; box-shadow: 0 0 15px rgba(168, 85, 247, 0.5); }
+        .market-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; margin-top: 10px; }
+        .item-card { background: rgba(36, 23, 74, 0.5); border: 1px solid rgba(168, 85, 247, 0.15); border-radius: 14px; padding: 20px; text-align: left; }
         .item-name { font-size: 1.2rem; font-weight: bold; color: #ffffff; }
         .item-namespace { font-size: 0.75rem; color: #a78bfa; opacity: 0.6; display: block; margin-bottom: 15px; }
         .price-row { display: flex; justify-content: space-between; margin-top: 6px; }
         .buy-value { color: #4ade80; font-weight: 700; }
         .sell-value { color: #f87171; font-weight: 700; }
         
-        /* Admin Button and Section Styles */
         .admin-trigger { margin-top: 40px; color: #a78bfa; background: none; border: none; cursor: pointer; font-size: 0.9rem; text-decoration: underline; opacity: 0.5; }
         .admin-trigger:hover { opacity: 1; }
         .admin-panel { display: none; margin-top: 30px; padding: 25px; background: rgba(255, 255, 255, 0.05); border-radius: 14px; border: 1px dashed rgba(168, 85, 247, 0.4); text-align: left; }
-        .admin-btn { background: #a855f7; border: none; color: white; padding: 12px 25px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; width: 100%; }
+        .admin-btn { background: #a855f7; border: none; color: white; padding: 12px 25px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; }
         .admin-btn:hover { background: #c084fc; }
     </style>
 </head>
 <body>
-
-    <!-- Stars containers element -->
-    <div id="stars-container"></div>
 
     <div class="banner-title">LUNARIA</div>
     <div class="tagline">✦ Build • Explore • Connect ✦</div>
@@ -167,7 +43,6 @@
         
         <div class="market-grid" id="market-grid"></div>
 
-        <!-- Admin Control Trigger -->
         <button class="admin-trigger" onclick="toggleAdminPanel()">⚙️ Access Admin Price Management</button>
         
         <div class="admin-panel" id="admin-panel">
@@ -194,51 +69,8 @@
 
 <script>
     let currentData = [];
-    // CHANGE THIS URL string below to your exact live Render app URL string!
+    // CHANGE THIS URL to your exact Render link
     const API_URL = "https://lunaria-prices.onrender.com"; 
-
-    // Generate Background Stars dynamically
-    function generateStarrySky() {
-        const container = document.getElementById('stars-container');
-        if(!container) return;
-        const starCount = 100;
-
-        for (let i = 0; i < starCount; i++) {
-            const star = document.createElement('div');
-            star.classList.add('star');
-            
-            const size = Math.random() * 2 + 1;
-            star.style.width = size + 'px';
-            star.style.height = size + 'px';
-            star.style.top = (Math.random() * 100) + '%';
-            star.style.left = (Math.random() * 100) + '%';
-            star.style.setProperty('--duration', (Math.random() * 3 + 2) + 's');
-            
-            container.appendChild(star);
-        }
-    }
-
-    // Spawn Shooting Stars
-    function spawnShootingStar() {
-        const star = document.createElement('div');
-        star.classList.add('shooting-star');
-
-        const startX = Math.random() * window.innerWidth;
-        const startY = Math.random() * (window.innerHeight / 2);
-        const duration = Math.random() * 1.5 + 1;
-
-        star.style.setProperty('--start-x', startX + 'px');
-        star.style.setProperty('--start-y', startY + 'px');
-        star.style.setProperty('--travel-x', (Math.random() * 300 + 200) + 'px');
-        star.style.setProperty('--travel-y', (Math.random() * 300 + 200) + 'px');
-        star.style.setProperty('--duration', duration + 's');
-
-        document.body.appendChild(star);
-
-        setTimeout(function() {
-            star.remove();
-        }, duration * 1000);
-    }
 
     async function fetchPrices() {
         const query = document.getElementById('search').value;
@@ -257,3 +89,43 @@
                 '</div>';
             });
         } catch (err) { console.error(err); }
+    }
+
+    function toggleAdminPanel() {
+        const panel = document.getElementById('admin-panel');
+        panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+    }
+
+    async function submitPriceUpdate() {
+        const item_id = document.getElementById('admin-item-id').value;
+        const buy_price = parseFloat(document.getElementById('admin-buy').value);
+        const sell_price = parseFloat(document.getElementById('admin-sell').value);
+        const password = document.getElementById('admin-pass').value;
+
+        if (!buy_price || !sell_price || !password) {
+            alert("Please fill out all admin fields!");
+            return;
+        }
+
+        try {
+            const response = await fetch(API_URL + '/api/prices/update', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ item_id, buy_price, sell_price, password })
+            });
+
+            const result = await response.json();
+            alert(result.message);
+            if (response.ok) {
+                fetchPrices();
+            }
+        } catch (err) {
+            alert("Could not connect to the server.");
+        }
+    }
+
+    // Load initial price list values on startup
+    fetchPrices();
+</script>
+</body>
+</html>
