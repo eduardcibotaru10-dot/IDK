@@ -5,7 +5,6 @@ const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// SET YOUR SECRET ADMIN PASSWORD RIGHT HERE!
 const ADMIN_PASSWORD = "LunariaSecret123!";
 
 app.use(cors());
@@ -16,33 +15,49 @@ const db = new sqlite3.Database('prices.db', (err) => {
     console.log('Lunaria Database Ready.');
 });
 
-db.serialize(() => {
-    // Create the pricing table layout
-    db.run(`CREATE TABLE IF NOT EXISTS prices (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        item_id TEXT NOT NULL UNIQUE,
-        item_name TEXT NOT NULL,
-        buy_price REAL,
-        sell_price REAL,
-        old_price REAL,
-        all_time_high REAL
-    )`);
+// Helper function to make sure items always exist in the table layout
+function ensureDefaultItems(callback) {
+    db.serialize(() => {
+        db.run(`CREATE TABLE IF NOT EXISTS prices (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            item_id TEXT NOT NULL UNIQUE,
+            item_name TEXT NOT NULL,
+            buy_price REAL,
+            sell_price REAL,
+            old_price REAL,
+            all_time_high REAL
+        )`, () => {
+            // Count items to see if Render wiped the database
+            db.get(`SELECT COUNT(*) as count FROM prices`, (err, row) => {
+                if (row && row.count === 0) {
+                    console.log("Render reset detected! Auto-populating items now...");
+                    const insertStmt = db.prepare(`INSERT OR IGNORE INTO prices (item_id, item_name, buy_price, sell_price, old_price, all_time_high) VALUES (?, ?, ?, ?, ?, ?)`);
+                    insertStmt.run('minecraft:diamond', 'Diamond', 500.00, 150.00, 500.00, 500.00);
+                    insertStmt.run('minecraft:iron_ingot', 'Iron Ingot', 50.00, 15.00, 50.00, 50.00);
+                    insertStmt.run('minecraft:netherite_ingot', 'Netherite Ingot', 5000.00, 2000.00, 5000.00, 5000.00);
+                    insertStmt.finalize(() => {
+                        if (callback) callback();
+                    });
+                } else {
+                    if (callback) callback();
+                }
+            });
+        });
+    });
+}
 
-    // Force populate the items right away if they don't exist yet!
-    const insertStmt = db.prepare(`INSERT OR IGNORE INTO prices (item_id, item_name, buy_price, sell_price, old_price, all_time_high) VALUES (?, ?, ?, ?, ?, ?)`);
-    insertStmt.run('minecraft:diamond', 'Diamond', 500.00, 150.00, 500.00, 500.00);
-    insertStmt.run('minecraft:iron_ingot', 'Iron Ingot', 50.00, 15.00, 50.00, 50.00);
-    insertStmt.run('minecraft:netherite_ingot', 'Netherite Ingot', 5000.00, 2000.00, 5000.00, 5000.00);
-    insertStmt.finalize();
-    console.log("Database seeded successfully with default items.");
-});
+// Run the check once immediately on startup
+ensureDefaultItems();
 
-// Search Route
+// Search Route - Now safely forces an auto-check before loading the grid
 app.get('/api/prices', (req, res) => {
     const query = req.query.search || '';
-    db.all(`SELECT * FROM prices WHERE item_name LIKE ? OR item_id LIKE ?`, [`%${query}%`, `%${query}%`], (err, rows) => {
-        if (err) return res.status(500).json({ error: err.message });
-        res.json(rows);
+    
+    ensureDefaultItems(() => {
+        db.all(`SELECT * FROM prices WHERE item_name LIKE ? OR item_id LIKE ?`, [`%${query}%`, `%${query}%`], (err, rows) => {
+            if (err) return res.status(500).json({ error: err.message });
+            res.json(rows);
+        });
     });
 });
 
@@ -54,16 +69,18 @@ app.post('/api/prices/update', (req, res) => {
         return res.status(403).json({ message: "❌ Invalid Admin Password Access Denied!" });
     }
 
-    db.get(`SELECT buy_price, all_time_high FROM prices WHERE item_id = ?`, [item_id], (err, row) => {
-        if (err || !row) return res.status(404).json({ message: "Item profile not found." });
+    ensureDefaultItems(() => {
+        db.get(`SELECT buy_price, all_time_high FROM prices WHERE item_id = ?`, [item_id], (err, row) => {
+            if (err || !row) return res.status(404).json({ message: "Item profile not found." });
 
-        const current_old_price = row.buy_price;
-        const new_ath = buy_price > row.all_time_high ? buy_price : row.all_time_high;
+            const current_old_price = row.buy_price;
+            const new_ath = buy_price > row.all_time_high ? buy_price : row.all_time_high;
 
-        const updateSql = `UPDATE prices SET buy_price = ?, sell_price = ?, old_price = ?, all_time_high = ? WHERE item_id = ?`;
-        db.run(updateSql, [buy_price, sell_price, current_old_price, new_ath, item_id], function(err) {
-            if (err) return res.status(500).json({ message: "Database update error." });
-            res.json({ message: "🎯 Prices successfully updated in Lunaria database!" });
+            const updateSql = `UPDATE prices SET buy_price = ?, sell_price = ?, old_price = ?, all_time_high = ? WHERE item_id = ?`;
+            db.run(updateSql, [buy_price, sell_price, current_old_price, new_ath, item_id], function(err) {
+                if (err) return res.status(500).json({ message: "Database update error." });
+                res.json({ message: "🎯 Prices successfully updated in Lunaria database!" });
+            });
         });
     });
 });
