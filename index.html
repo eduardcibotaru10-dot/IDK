@@ -5,75 +5,72 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lunaria SMP - Economy Hub</title>
     <style>
-        /* 🌌 Pure CSS Space and Starry Background */
+        /* 🌌 Deep Cosmic Space Background Texture */
         body { 
             font-family: 'Segoe UI', system-ui, sans-serif; 
             background-color: #060214;
-            /* Layered radial gradient creates a deep cosmic sky effect with tiny stars built directly into the background texture */
             background-image: 
                 radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
-                radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px),
-                radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 40px),
+                radial-gradient(white, rgba(255,255,255,.1) 1px, transparent 30px),
                 linear-gradient(135deg, #050212 0%, #0c0624 50%, #050212 100%);
-            background-size: 550px 550px, 350px 350px, 250px 250px, 100% 100%;
+            background-size: 550px 550px, 350px 350px, 100% 100%;
             background-attachment: fixed;
             color: #f1edfa; 
             text-align: center; 
             padding: 40px 20px; 
             margin: 0;
-            animation: cosmicShift 20s infinite alternate linear;
-            position: relative;
             overflow-x: hidden;
+            position: relative;
         }
 
-        /* Subtle background shimmer effect */
-        @keyframes cosmicShift {
-            0% { background-position: 0% 0%, 0% 0%, 0% 0%, 0% 0%; }
-            100% { background-position: 20px 40px, -30px 10px, 10px -20px, 0% 0%; }
-        }
-
-        /* 🌠 Passing Stars Cluster Container */
+        /* 🌠 Fast Shooting Star Stream Container */
         .star-stream {
             position: fixed;
-            top: -20px;
-            right: -20px;
-            width: 10px;
-            height: 10px;
+            top: -50px;
+            right: -50px;
+            width: 200px;
+            height: 200px;
             pointer-events: none;
             z-index: -1;
         }
 
-        /* Star styling with individual glow effects */
+        /* 💫 Hyper-Fast Stars with Long Glowing Light Trails */
         .cluster-star {
             position: absolute;
-            background: #ffffff;
-            border-radius: 50%;
-            box-shadow: 0 0 8px #c084fc, 0 0 15px #ffffff;
+            height: 2px;
+            /* Linear gradient creates a trailing light effect pointing backward */
+            background: linear-gradient(-45deg, #ffffff, #a855f7, rgba(0,0,0,0));
+            filter: drop-shadow(0 0 6px #c084fc);
             opacity: 0;
-            animation: driftLeft 8s infinite linear;
+            /* Speed increased to 1.8 seconds for a fast shooting effect */
+            animation: shootMeteor 1.8s infinite ease-in-out;
+            transform: rotate(-45deg);
         }
 
-        /* Position variations to make them look like a natural group of 1 to 4 stars */
-        .s1 { width: 3px; height: 3px; animation-delay: 0s; top: 10px; right: 10px; }
-        .s2 { width: 2px; height: 2px; animation-delay: 1.5s; top: 40px; right: 70px; }
-        .s3 { width: 4px; height: 4px; animation-delay: 3.2s; top: -10px; right: 130px; }
-        .s4 { width: 2px; height: 2px; animation-delay: 4.8s; top: 80px; right: 20px; }
+        /* Unique positions, delays, and lengths for each meteor trail */
+        .s1 { width: 80px;  animation-delay: 0s;    top: 10px;  right: 10px;  }
+        .s2 { width: 120px; animation-delay: 0.4s;  top: 50px;  right: 90px;  }
+        .s3 { width: 60px;  animation-delay: 0.9s;  top: -20px; right: 150px; }
+        .s4 { width: 100px; animation-delay: 1.3s;  top: 90px;  right: 30px;  }
 
-        /* Animation traveling from the top-right corner to the bottom-left corner */
-        @keyframes driftLeft {
+        /* Fast movement from top-right down to the bottom-left */
+        @keyframes shootMeteor {
             0% {
-                transform: translate(0, 0);
+                transform: translate(0, 0) rotate(-45deg);
                 opacity: 0;
+                width: 0px;
             }
             10% {
-                opacity: 0.8;
+                opacity: 1;
+                width: 100px;
             }
             90% {
-                opacity: 0.8;
+                opacity: 1;
             }
             100% {
-                transform: translate(-120vw, 100vh);
+                transform: translate(-130vw, 110vh) rotate(-45deg);
                 opacity: 0;
+                width: 0px;
             }
         }
 
@@ -87,7 +84,6 @@
         }
         .tagline { color: #d8b4fe; font-size: 0.9rem; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 40px; }
         
-        /* Glassmorphism containers that let the starry backdrop peek through slightly */
         .container { 
             max-width: 800px; 
             margin: 0 auto; 
@@ -104,7 +100,6 @@
         input:focus { border-color: #c084fc; outline: none; box-shadow: 0 0 15px rgba(168, 85, 247, 0.5); }
         .market-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; margin-top: 10px; }
         
-        /* Glowing Item Cards */
         .item-card { 
             background: rgba(36, 23, 74, 0.6); 
             border: 1px solid rgba(168, 85, 247, 0.2); 
@@ -135,7 +130,7 @@
 </head>
 <body>
 
-    <!-- 🌌 Star stream container holding our animated group elements -->
+    <!-- 🌌 Star stream elements featuring sleek trails -->
     <div class="star-stream">
         <div class="cluster-star s1"></div>
         <div class="cluster-star s2"></div>
@@ -177,8 +172,6 @@
 
 <script>
     let currentData = [];
-    
-    // Linked to your live Render service address
     const API_URL = "https://onrender.com"; 
 
     async function fetchPrices() {
@@ -211,8 +204,8 @@
         const sell_price = parseFloat(document.getElementById('admin-sell').value);
         const password = document.getElementById('admin-pass').value;
 
-        if (!buy_price || !sell_price || !password) {
-            alert("Please fill out all admin fields!");
+        if (isNaN(buy_price) || isNaN(sell_price) || !password) {
+            alert("Please fill out all admin fields with valid numbers!");
             return;
         }
 
@@ -220,9 +213,25 @@
             const response = await fetch(API_URL + '/api/prices/update', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ item_id, buy_price, sell_price, password })
+                body: JSON.stringify({ 
+                    item_id: item_id, 
+                    buy_price: buy_price, 
+                    sell_price: sell_price, 
+                    password: password 
+                })
             });
 
             const result = await response.json();
             alert(result.message);
             if (response.ok) {
+                fetchPrices();
+            }
+        } catch (err) {
+            alert("Could not connect to the database.");
+        }
+    }
+
+    fetchPrices();
+</script>
+</body>
+</html>
