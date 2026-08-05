@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Lunaria SMP - Economy Hub</title>
 
     <style>
@@ -14,7 +13,6 @@
         body {
             font-family: 'Segoe UI', system-ui, sans-serif;
             background-color: #060214;
-
             background-image:
                 radial-gradient(circle at 10% 10%, #ffffff 2px, transparent 2px),
                 radial-gradient(circle at 30% 20%, #ffffff 3px, transparent 3px),
@@ -25,19 +23,66 @@
                 radial-gradient(circle at 90% 30%, #ffffff 2px, transparent 2px),
                 radial-gradient(circle at 40% 85%, #ffffff 3px, transparent 3px),
                 linear-gradient(135deg, #0d0624 0%, #1a0f3c 45%, #060214 100%);
-
             color: #f1edfa;
             text-align: center;
-            padding: 60px 20px;
+            padding: 40px 20px;
             margin: 0;
             min-height: 100vh;
             background-attachment: fixed;
             overflow-x: hidden;
         }
 
-        /* =========================
-           METEORS
-        ========================= */
+        /* LANGUAGE MENU */
+        .language-wrapper {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+        }
+
+        .language-button {
+            background: rgba(13, 6, 29, 0.9);
+            color: white;
+            border: 1px solid rgba(168, 85, 247, 0.5);
+            padding: 10px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .language-button:hover {
+            border-color: #c084fc;
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
+        }
+
+        .language-menu {
+            display: none;
+            margin-top: 8px;
+            background: rgba(13, 6, 29, 0.97);
+            border: 1px solid rgba(168, 85, 247, 0.5);
+            border-radius: 12px;
+            overflow: hidden;
+            min-width: 150px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .language-menu button {
+            width: 100%;
+            padding: 11px;
+            border: none;
+            background: transparent;
+            color: white;
+            cursor: pointer;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        .language-menu button:hover {
+            background: rgba(168, 85, 247, 0.25);
+        }
+
+        /* METEORS */
 
         .sky-meteor {
             position: fixed;
@@ -48,7 +93,6 @@
                 #c084fc,
                 rgba(0, 0, 0, 0)
             );
-
             filter: drop-shadow(0 0 6px #c084fc);
             opacity: 0;
             animation: moveMeteor 4s infinite linear;
@@ -98,72 +142,16 @@
             }
         }
 
-        /* =========================
-           LANGUAGE MENU
-        ========================= */
-
-        .language-menu {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-        }
-
-        .language-button {
-            background: rgba(13, 6, 29, 0.9);
-            color: white;
-            border: 1px solid rgba(168, 85, 247, 0.5);
-            border-radius: 10px;
-            padding: 10px 15px;
-            cursor: pointer;
-            font-size: 14px;
-            backdrop-filter: blur(10px);
-        }
-
-        .language-button:hover {
-            border-color: #c084fc;
-            box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
-        }
-
-        .language-options {
-            display: none;
-            margin-top: 8px;
-            background: rgba(13, 6, 29, 0.97);
-            border: 1px solid rgba(168, 85, 247, 0.5);
-            border-radius: 10px;
-            overflow: hidden;
-            min-width: 130px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-
-        .language-options button {
-            width: 100%;
-            padding: 11px;
-            background: transparent;
-            border: none;
-            color: white;
-            cursor: pointer;
-            text-align: left;
-        }
-
-        .language-options button:hover {
-            background: rgba(168, 85, 247, 0.25);
-        }
-
-        /* =========================
-           HEADER
-        ========================= */
+        /* HEADER */
 
         .banner-title {
             font-size: 4rem;
             font-weight: 900;
-            color: white;
+            color: #ffffff;
             margin-bottom: 2px;
-
             text-shadow:
                 0 0 25px rgba(168, 85, 247, 0.9),
                 0 0 50px rgba(192, 132, 252, 0.5);
-
             letter-spacing: 6px;
         }
 
@@ -176,172 +164,116 @@
             opacity: 0.85;
         }
 
-        /* =========================
-           MAIN CONTAINER
-        ========================= */
+        /* MAIN CONTAINER */
 
         .container {
-            max-width: 900px;
+            max-width: 1000px;
             margin: 0 auto;
-
             background: rgba(13, 6, 29, 0.85);
-
             padding: 40px;
             border-radius: 24px;
-
             border: 1px solid rgba(168, 85, 247, 0.4);
-
             box-shadow:
                 0 25px 60px rgba(0, 0, 0, 0.85),
                 inset 0 0 25px rgba(168, 85, 247, 0.15);
-
             backdrop-filter: blur(16px);
         }
 
-        /* =========================
-           SEARCH
-        ========================= */
+        /* SEARCH */
 
-        #search {
+        input {
             width: 92%;
             padding: 16px;
-
             margin-bottom: 25px;
-
             border-radius: 12px;
             border: 1px solid rgba(168, 85, 247, 0.5);
-
             background: rgba(7, 3, 15, 0.95);
-
-            color: white;
+            color: #fff;
             font-size: 16px;
         }
 
-        #search:focus {
+        input:focus {
             outline: none;
             border-color: #c084fc;
-
-            box-shadow:
-                0 0 12px rgba(168, 85, 247, 0.35);
+            box-shadow: 0 0 12px rgba(168, 85, 247, 0.35);
         }
 
-        /* =========================
-           MARKET
-        ========================= */
+        /* ITEMS */
 
         .market-grid {
             display: grid;
-
-            grid-template-columns:
-                repeat(auto-fill, minmax(230px, 1fr));
-
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
             gap: 25px;
-            margin-top: 10px;
         }
 
         .item-card {
             background: rgba(30, 16, 61, 0.65);
-
             border: 1px solid rgba(168, 85, 247, 0.25);
-
             border-radius: 18px;
-
             padding: 20px;
-
             text-align: left;
-
-            box-shadow:
-                0 6px 20px rgba(0, 0, 0, 0.5);
-
+            box-shadow: 0 6px 20px rgba(0,0,0,0.5);
             transition: 0.25s ease;
-
-            overflow: hidden;
         }
 
         .item-card:hover {
             transform: translateY(-5px);
-
-            border-color:
-                rgba(192, 132, 252, 0.7);
-
-            box-shadow:
-                0 10px 30px rgba(168, 85, 247, 0.25);
+            border-color: rgba(192, 132, 252, 0.7);
+            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.25);
         }
 
-        /* =========================
-           MINECRAFT IMAGE
-        ========================= */
+        /* MINECRAFT IMAGE */
 
         .item-image {
-            width: 90px;
-            height: 90px;
-
-            display: block;
-
-            margin: 0 auto 15px auto;
-
+            width: 96px;
+            height: 96px;
             object-fit: contain;
-
+            display: block;
+            margin: 0 auto 15px auto;
             image-rendering: pixelated;
-
-            filter:
-                drop-shadow(
-                    0 5px 8px rgba(0,0,0,0.65)
-                );
+            filter: drop-shadow(0 0 8px rgba(192,132,252,0.3));
         }
 
         .item-name {
-            font-size: 1.3rem;
+            font-size: 1.25rem;
             font-weight: bold;
-            color: white;
+            color: #ffffff;
+            text-align: center;
         }
 
         .item-namespace {
-            font-size: 0.8rem;
-
+            font-size: 0.75rem;
             color: #c084fc;
-
-            opacity: 0.8;
-
+            opacity: 0.75;
             display: block;
-
+            margin-top: 5px;
             margin-bottom: 15px;
+            text-align: center;
+            word-break: break-all;
         }
 
         .price-row {
             display: flex;
-
             justify-content: space-between;
-
             margin-top: 8px;
-
-            font-size: 1.05rem;
+            font-size: 1.1rem;
         }
 
         .worth-value {
             color: #4ade80;
-            font-weight: 700;
+            font-weight: 800;
         }
 
-        /* =========================
-           ADMIN
-        ========================= */
+        /* ADMIN */
 
         .admin-trigger {
             margin-top: 40px;
-
             color: #a78bfa;
-
             background: none;
-
             border: none;
-
             cursor: pointer;
-
             font-size: 0.95rem;
-
             text-decoration: underline;
-
             opacity: 0.5;
         }
 
@@ -351,19 +283,11 @@
 
         .admin-panel {
             display: none;
-
             margin-top: 30px;
-
             padding: 25px;
-
-            background:
-                rgba(7, 3, 15, 0.85);
-
+            background: rgba(7, 3, 15, 0.85);
             border-radius: 14px;
-
-            border:
-                1px dashed rgba(168, 85, 247, 0.5);
-
+            border: 1px dashed rgba(168, 85, 247, 0.5);
             text-align: left;
         }
 
@@ -374,63 +298,25 @@
 
         .admin-panel label {
             display: block;
-
             margin-bottom: 8px;
-
             color: #ddd;
-
             font-weight: 600;
         }
 
         .admin-panel input {
             width: 100%;
-
-            padding: 13px;
-
-            margin-bottom: 18px;
-
-            border-radius: 10px;
-
-            border:
-                1px solid rgba(168, 85, 247, 0.5);
-
-            background:
-                rgba(7, 3, 15, 0.95);
-
-            color: white;
-
-            font-size: 15px;
-        }
-
-        .admin-panel input:focus {
-            outline: none;
-
-            border-color: #c084fc;
-        }
-
-        .admin-btn,
-        .delete-btn {
-            border: none;
-
-            color: white;
-
-            padding: 12px 25px;
-
-            border-radius: 8px;
-
-            font-weight: bold;
-
-            cursor: pointer;
-
-            width: 100%;
-
-            transition: 0.3s;
-
-            font-size: 1rem;
         }
 
         .admin-btn {
             background: #a855f7;
+            border: none;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
             margin-bottom: 15px;
         }
 
@@ -440,28 +326,27 @@
 
         .delete-btn {
             background: #ef4444;
+            border: none;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
         }
 
         .delete-btn:hover {
             background: #f87171;
-
-            box-shadow:
-                0 0 15px rgba(239, 68, 68, 0.4);
         }
 
-        /* =========================
-           MOBILE
-        ========================= */
-
         @media (max-width: 600px) {
-
             body {
                 padding: 30px 12px;
             }
 
             .banner-title {
                 font-size: 2.7rem;
-                letter-spacing: 4px;
             }
 
             .container {
@@ -472,7 +357,7 @@
                 grid-template-columns: 1fr;
             }
 
-            .language-menu {
+            .language-wrapper {
                 top: 10px;
                 right: 10px;
             }
@@ -482,28 +367,15 @@
 
 <body>
 
-    <!-- METEORS -->
-
-    <div class="sky-meteor m1"></div>
-    <div class="sky-meteor m2"></div>
-    <div class="sky-meteor m3"></div>
-
-
     <!-- LANGUAGE MENU -->
 
-    <div class="language-menu">
+    <div class="language-wrapper">
 
-        <button
-            class="language-button"
-            onclick="toggleLanguages()"
-        >
-            🌐 <span id="language-current">English</span>
+        <button class="language-button" onclick="toggleLanguages()">
+            🌐 <span id="current-language">English</span>
         </button>
 
-        <div
-            class="language-options"
-            id="language-options"
-        >
+        <div class="language-menu" id="language-menu">
 
             <button onclick="setLanguage('en')">
                 🇬🇧 English
@@ -513,30 +385,39 @@
                 🇷🇴 Română
             </button>
 
+            <button onclick="setLanguage('es')">
+                🇪🇸 Español
+            </button>
+
+            <button onclick="setLanguage('fr')">
+                🇫🇷 Français
+            </button>
+
+            <button onclick="setLanguage('de')">
+                🇩🇪 Deutsch
+            </button>
+
         </div>
 
     </div>
 
+    <!-- METEORS -->
+
+    <div class="sky-meteor m1"></div>
+    <div class="sky-meteor m2"></div>
+    <div class="sky-meteor m3"></div>
 
     <!-- HEADER -->
 
-    <div class="banner-title">
-        LUNARIA
-    </div>
+    <div class="banner-title">LUNARIA</div>
 
-    <div
-        class="tagline"
-        id="tagline"
-    >
+    <div class="tagline" id="tagline">
         ✦ Build • Explore • Connect ✦
     </div>
-
 
     <!-- MAIN -->
 
     <div class="container">
-
-        <!-- SEARCH -->
 
         <input
             type="text"
@@ -545,39 +426,27 @@
             oninput="fetchPrices()"
         >
 
-
-        <!-- ITEMS -->
-
-        <div
-            class="market-grid"
-            id="market-grid"
-        ></div>
-
+        <div class="market-grid" id="market-grid"></div>
 
         <!-- ADMIN BUTTON -->
 
         <button
             class="admin-trigger"
-            id="admin-trigger"
             onclick="toggleAdminPanel()"
+            id="admin-trigger"
         >
             ⚙️ Access Admin Price Management
         </button>
 
-
         <!-- ADMIN PANEL -->
 
-        <div
-            class="admin-panel"
-            id="admin-panel"
-        >
+        <div class="admin-panel" id="admin-panel">
 
             <h3 id="admin-title">
                 Update / Add Server Items
             </h3>
 
-
-            <label for="admin-item-id">
+            <label id="item-id-label">
                 Item Namespace ID:
             </label>
 
@@ -587,8 +456,7 @@
                 placeholder="e.g. minecraft:diamond"
             >
 
-
-            <label for="admin-item-name">
+            <label id="item-name-label">
                 Display Name:
             </label>
 
@@ -598,9 +466,8 @@
                 placeholder="e.g. Diamond"
             >
 
-
-            <label for="admin-sell">
-                Worth Price ($):
+            <label id="sell-label">
+                Worth Price:
             </label>
 
             <input
@@ -610,8 +477,7 @@
                 step="0.01"
             >
 
-
-            <label for="admin-pass">
+            <label id="password-label">
                 Secret Admin Password:
             </label>
 
@@ -621,222 +487,155 @@
                 placeholder="Enter password..."
             >
 
-
             <button
                 class="admin-btn"
-                id="admin-update"
                 onclick="submitPriceUpdate()"
+                id="update-button"
             >
                 Apply Changes
             </button>
 
-
             <button
                 class="delete-btn"
-                id="admin-delete"
                 onclick="submitPriceDelete()"
+                id="delete-button"
             >
-                🗑️ Delete Item From Registry
+                🗑️ Delete Item
             </button>
 
         </div>
 
     </div>
 
-
     <script>
 
-        /* ======================================
-           API
-        ====================================== */
+        const API_URL = "https://lunaria-prices.onrender.com";
 
-        const API_URL =
-            "https://lunaria-prices.onrender.com";
-
-
-        /* ======================================
-           LANGUAGES
-        ====================================== */
-
-        let currentLanguage =
-            localStorage.getItem("lunaria-language") || "en";
-
+        /* =========================
+           LANGUAGE SYSTEM
+        ========================= */
 
         const translations = {
 
             en: {
-
-                language: "English",
-
-                tagline:
-                    "✦ Build • Explore • Connect ✦",
-
-                search:
-                    "Search item registry (e.g., Diamond)...",
-
-                noItems:
-                    "No items found.",
-
-                connectionError:
-                    "Unable to connect to the economy API.",
-
-                worth:
-                    "Worth:",
-
-                admin:
-                    "⚙️ Access Admin Price Management",
-
-                adminTitle:
-                    "Update / Add Server Items",
-
-                namespace:
-                    "Item Namespace ID:",
-
-                displayName:
-                    "Display Name:",
-
-                worthPrice:
-                    "Worth Price ($):",
-
-                password:
-                    "Secret Admin Password:",
-
-                passwordPlaceholder:
-                    "Enter password...",
-
-                update:
-                    "Apply Changes",
-
-                delete:
-                    "🗑️ Delete Item From Registry",
-
-                itemIdPlaceholder:
-                    "e.g. minecraft:diamond",
-
-                itemNamePlaceholder:
-                    "e.g. Diamond",
-
-                worthPlaceholder:
-                    "e.g. 150",
-
-                fillFields:
-                    "Please fill out all fields correctly!",
-
-                invalidPassword:
-                    "❌ Invalid Admin Password Access Denied!",
-
-                updateSuccess:
-                    "🎯 Worth price successfully updated!",
-
-                updateError:
-                    "Error sending update.",
-
-                deleteConfirm:
-                    "Are you absolutely sure you want to delete",
-
-                deleteSuccess:
-                    "Item deletion completed.",
-
-                deleteError:
-                    "Error running deletion."
-
+                name: "English",
+                tagline: "✦ Build • Explore • Connect ✦",
+                search: "Search item registry (e.g., Diamond)...",
+                noItems: "No items found.",
+                connection: "Unable to connect to the economy API.",
+                worth: "Worth:",
+                admin: "⚙️ Access Admin Price Management",
+                adminTitle: "Update / Add Server Items",
+                itemId: "Item Namespace ID:",
+                itemName: "Display Name:",
+                worthPrice: "Worth Price:",
+                password: "Secret Admin Password:",
+                passwordPlaceholder: "Enter password...",
+                update: "Apply Changes",
+                delete: "🗑️ Delete Item",
+                fill: "Please fill out all fields correctly!",
+                deleteConfirm: "Are you absolutely sure you want to delete",
+                updateError: "Error sending update.",
+                deleteError: "Error running deletion."
             },
 
-
             ro: {
+                name: "Română",
+                tagline: "✦ Construiește • Explorează • Conectează-te ✦",
+                search: "Caută un item (ex. Diamond)...",
+                noItems: "Nu au fost găsite iteme.",
+                connection: "Nu se poate conecta la API-ul economiei.",
+                worth: "Valoare:",
+                admin: "⚙️ Accesează gestionarea prețurilor",
+                adminTitle: "Adaugă / Modifică iteme",
+                itemId: "ID Namespace al itemului:",
+                itemName: "Numele afișat:",
+                worthPrice: "Prețul de valoare:",
+                password: "Parola secretă de Admin:",
+                passwordPlaceholder: "Introdu parola...",
+                update: "Aplică modificările",
+                delete: "🗑️ Șterge itemul",
+                fill: "Completează toate câmpurile corect!",
+                deleteConfirm: "Ești absolut sigur că vrei să ștergi",
+                updateError: "Eroare la trimiterea modificării.",
+                deleteError: "Eroare la ștergerea itemului."
+            },
 
-                language: "Română",
+            es: {
+                name: "Español",
+                tagline: "✦ Construye • Explora • Conecta ✦",
+                search: "Buscar objeto (ej. Diamond)...",
+                noItems: "No se encontraron objetos.",
+                connection: "No se puede conectar con la API.",
+                worth: "Valor:",
+                admin: "⚙️ Gestión de precios",
+                adminTitle: "Añadir / Modificar objetos",
+                itemId: "ID Namespace:",
+                itemName: "Nombre:",
+                worthPrice: "Precio de valor:",
+                password: "Contraseña de administrador:",
+                passwordPlaceholder: "Introduce la contraseña...",
+                update: "Aplicar cambios",
+                delete: "🗑️ Eliminar objeto",
+                fill: "¡Completa todos los campos correctamente!",
+                deleteConfirm: "¿Seguro que quieres eliminar",
+                updateError: "Error al enviar la actualización.",
+                deleteError: "Error al eliminar."
+            },
 
-                tagline:
-                    "✦ Construiește • Explorează • Conectează-te ✦",
+            fr: {
+                name: "Français",
+                tagline: "✦ Construire • Explorer • Connecter ✦",
+                search: "Rechercher un objet (ex. Diamond)...",
+                noItems: "Aucun objet trouvé.",
+                connection: "Impossible de se connecter à l'API.",
+                worth: "Valeur :",
+                admin: "⚙️ Gestion des prix",
+                adminTitle: "Ajouter / Modifier des objets",
+                itemId: "ID Namespace :",
+                itemName: "Nom affiché :",
+                worthPrice: "Prix de valeur :",
+                password: "Mot de passe administrateur :",
+                passwordPlaceholder: "Entrez le mot de passe...",
+                update: "Appliquer les changements",
+                delete: "🗑️ Supprimer l'objet",
+                fill: "Veuillez remplir correctement tous les champs !",
+                deleteConfirm: "Êtes-vous sûr de vouloir supprimer",
+                updateError: "Erreur lors de la mise à jour.",
+                deleteError: "Erreur lors de la suppression."
+            },
 
-                search:
-                    "Caută un item (ex. Diamond)...",
-
-                noItems:
-                    "Nu au fost găsite iteme.",
-
-                connectionError:
-                    "Nu se poate conecta la API-ul economiei.",
-
-                worth:
-                    "Valoare:",
-
-                admin:
-                    "⚙️ Accesează gestionarea prețurilor",
-
-                adminTitle:
-                    "Actualizează / Adaugă iteme",
-
-                namespace:
-                    "ID Namespace al itemului:",
-
-                displayName:
-                    "Numele afișat:",
-
-                worthPrice:
-                    "Preț valoare ($):",
-
-                password:
-                    "Parola secretă de admin:",
-
-                passwordPlaceholder:
-                    "Introdu parola...",
-
-                update:
-                    "Aplică modificările",
-
-                delete:
-                    "🗑️ Șterge itemul din registru",
-
-                itemIdPlaceholder:
-                    "ex. minecraft:diamond",
-
-                itemNamePlaceholder:
-                    "ex. Diamond",
-
-                worthPlaceholder:
-                    "ex. 150",
-
-                fillFields:
-                    "Completează corect toate câmpurile!",
-
-                invalidPassword:
-                    "❌ Parolă de admin invalidă! Acces respins!",
-
-                updateSuccess:
-                    "🎯 Valoarea a fost actualizată!",
-
-                updateError:
-                    "Eroare la trimiterea modificării.",
-
-                deleteConfirm:
-                    "Ești absolut sigur că vrei să ștergi",
-
-                deleteSuccess:
-                    "Itemul a fost șters.",
-
-                deleteError:
-                    "Eroare la ștergerea itemului."
-
+            de: {
+                name: "Deutsch",
+                tagline: "✦ Bauen • Erkunden • Verbinden ✦",
+                search: "Item suchen (z.B. Diamond)...",
+                noItems: "Keine Items gefunden.",
+                connection: "Verbindung zur Economy-API fehlgeschlagen.",
+                worth: "Wert:",
+                admin: "⚙️ Preisverwaltung",
+                adminTitle: "Items hinzufügen / bearbeiten",
+                itemId: "Item Namespace ID:",
+                itemName: "Anzeigename:",
+                worthPrice: "Wertpreis:",
+                password: "Admin-Passwort:",
+                passwordPlaceholder: "Passwort eingeben...",
+                update: "Änderungen anwenden",
+                delete: "🗑️ Item löschen",
+                fill: "Bitte fülle alle Felder korrekt aus!",
+                deleteConfirm: "Möchtest du wirklich löschen",
+                updateError: "Fehler beim Aktualisieren.",
+                deleteError: "Fehler beim Löschen."
             }
 
         };
 
-
-        function t(key) {
-
-            return translations[currentLanguage][key];
-
-        }
-
+        let currentLanguage =
+            localStorage.getItem("lunariaLanguage") || "en";
 
         function toggleLanguages() {
 
             const menu =
-                document.getElementById(
-                    "language-options"
-                );
+                document.getElementById("language-menu");
 
             menu.style.display =
                 menu.style.display === "block"
@@ -844,133 +643,105 @@
                     : "block";
         }
 
-
         function setLanguage(language) {
+
+            if (!translations[language]) return;
 
             currentLanguage = language;
 
             localStorage.setItem(
-                "lunaria-language",
+                "lunariaLanguage",
                 language
             );
 
-            updateLanguage();
+            applyLanguage();
 
             document.getElementById(
-                "language-options"
+                "language-menu"
             ).style.display = "none";
 
             fetchPrices();
         }
 
+        function applyLanguage() {
 
-        function updateLanguage() {
+            const t =
+                translations[currentLanguage];
 
             document.getElementById(
-                "language-current"
-            ).textContent = t("language");
-
+                "current-language"
+            ).textContent = t.name;
 
             document.getElementById(
                 "tagline"
-            ).textContent = t("tagline");
-
+            ).textContent = t.tagline;
 
             document.getElementById(
                 "search"
-            ).placeholder = t("search");
-
+            ).placeholder = t.search;
 
             document.getElementById(
                 "admin-trigger"
-            ).textContent = t("admin");
-
+            ).textContent = t.admin;
 
             document.getElementById(
                 "admin-title"
-            ).textContent = t("adminTitle");
+            ).textContent = t.adminTitle;
 
+            document.getElementById(
+                "item-id-label"
+            ).textContent = t.itemId;
 
-            document.querySelector(
-                'label[for="admin-item-id"]'
-            ).textContent = t("namespace");
+            document.getElementById(
+                "item-name-label"
+            ).textContent = t.itemName;
 
+            document.getElementById(
+                "sell-label"
+            ).textContent = t.worthPrice;
 
-            document.querySelector(
-                'label[for="admin-item-name"]'
-            ).textContent = t("displayName");
-
-
-            document.querySelector(
-                'label[for="admin-sell"]'
-            ).textContent = t("worthPrice");
-
-
-            document.querySelector(
-                'label[for="admin-pass"]'
-            ).textContent = t("password");
-
+            document.getElementById(
+                "password-label"
+            ).textContent = t.password;
 
             document.getElementById(
                 "admin-pass"
-            ).placeholder =
-                t("passwordPlaceholder");
-
+            ).placeholder = t.passwordPlaceholder;
 
             document.getElementById(
-                "admin-update"
-            ).textContent = t("update");
-
-
-            document.getElementById(
-                "admin-delete"
-            ).textContent = t("delete");
-
+                "update-button"
+            ).textContent = t.update;
 
             document.getElementById(
-                "admin-item-id"
-            ).placeholder =
-                t("itemIdPlaceholder");
+                "delete-button"
+            ).textContent = t.delete;
 
-
-            document.getElementById(
-                "admin-item-name"
-            ).placeholder =
-                t("itemNamePlaceholder");
-
-
-            document.getElementById(
-                "admin-sell"
-            ).placeholder =
-                t("worthPlaceholder");
-
+            document.documentElement.lang =
+                currentLanguage;
         }
 
-
-        /* ======================================
+        /* =========================
            IMAGE SYSTEM
-        ====================================== */
+        ========================= */
 
-        function getTextureURL(itemId) {
+        function getMinecraftImage(itemId) {
 
-            const name =
+            /*
+             * Uses the Minecraft Wiki/Smithed-style
+             * item texture path.
+             */
+
+            const cleanId =
                 itemId
                     .replace("minecraft:", "")
-                    .toLowerCase();
+                    .trim();
 
-            return (
-                "https://mcasset.cloud/26.1/assets/" +
-                "minecraft/textures/block/" +
-                name +
-                ".png"
-            );
-
+            return `https://minecraft.wiki/images/InvIcon_${cleanId}.png`;
         }
 
-
-        /* ======================================
+        /* =========================
            RENDER ITEMS
-        ====================================== */
+        ========================= */
 
         function renderCards(items) {
 
@@ -981,11 +752,11 @@
 
             grid.innerHTML = "";
 
+            const t =
+                translations[currentLanguage];
 
-            if (
-                !Array.isArray(items) ||
-                items.length === 0
-            ) {
+            if (!Array.isArray(items) ||
+                items.length === 0) {
 
                 grid.innerHTML = `
                     <div style="
@@ -993,13 +764,12 @@
                         padding: 30px;
                         color: #c084fc;
                     ">
-                        ${t("noItems")}
+                        ${t.noItems}
                     </div>
                 `;
 
                 return;
             }
-
 
             items.forEach(function(item) {
 
@@ -1008,7 +778,6 @@
 
                 card.className =
                     "item-card";
-
 
                 /* IMAGE */
 
@@ -1019,64 +788,56 @@
                     "item-image";
 
                 image.src =
-                    getTextureURL(item.item_id);
+                    getMinecraftImage(
+                        item.item_id
+                    );
 
                 image.alt =
-                    item.item_name ||
-                    "Minecraft item";
-
+                    item.item_name;
 
                 /*
-                    If the texture doesn't exist,
-                    hide the broken image.
-                */
+                 * If the image cannot be found,
+                 * hide the broken image icon.
+                 */
 
                 image.onerror = function() {
-
-                    this.style.display =
-                        "none";
-
+                    this.style.display = "none";
                 };
-
 
                 /* NAME */
 
-                const name =
+                const itemName =
                     document.createElement("div");
 
-                name.className =
+                itemName.className =
                     "item-name";
 
-                name.textContent =
+                itemName.textContent =
                     item.item_name ||
                     "Unknown Item";
 
-
                 /* ID */
 
-                const id =
+                const namespace =
                     document.createElement("span");
 
-                id.className =
+                namespace.className =
                     "item-namespace";
 
-                id.textContent =
+                namespace.textContent =
                     item.item_id ||
                     "Unknown ID";
 
-
                 /* WORTH */
 
-                const worth =
+                const worthRow =
                     document.createElement("div");
 
-                worth.className =
+                worthRow.className =
                     "price-row";
 
-                worth.innerHTML = `
-                    <span>
-                        ${t("worth")}
-                    </span>
+                worthRow.innerHTML = `
+                    <span>${t.worth}</span>
 
                     <span class="worth-value">
                         $${Number(
@@ -1085,26 +846,18 @@
                     </span>
                 `;
 
-
                 card.appendChild(image);
-
-                card.appendChild(name);
-
-                card.appendChild(id);
-
-                card.appendChild(worth);
-
+                card.appendChild(itemName);
+                card.appendChild(namespace);
+                card.appendChild(worthRow);
 
                 grid.appendChild(card);
-
             });
-
         }
 
-
-        /* ======================================
+        /* =========================
            FETCH PRICES
-        ====================================== */
+        ========================= */
 
         async function fetchPrices() {
 
@@ -1113,7 +866,6 @@
                     .getElementById("search")
                     .value
                     .trim();
-
 
             try {
 
@@ -1124,27 +876,23 @@
                         encodeURIComponent(query)
                     );
 
-
                 if (!response.ok) {
-
                     throw new Error(
                         "API request failed"
                     );
-
                 }
-
 
                 const data =
                     await response.json();
 
-
                 renderCards(data);
-
 
             } catch (err) {
 
                 console.error(err);
 
+                const t =
+                    translations[currentLanguage];
 
                 document.getElementById(
                     "market-grid"
@@ -1154,18 +902,15 @@
                         padding: 30px;
                         color: #f87171;
                     ">
-                        ${t("connectionError")}
+                        ${t.connection}
                     </div>
                 `;
-
             }
-
         }
 
-
-        /* ======================================
+        /* =========================
            ADMIN PANEL
-        ====================================== */
+        ========================= */
 
         function toggleAdminPanel() {
 
@@ -1174,56 +919,44 @@
                     "admin-panel"
                 );
 
-
             panel.style.display =
                 panel.style.display === "block"
                     ? "none"
                     : "block";
-
         }
 
-
-        /* ======================================
+        /* =========================
            UPDATE ITEM
-        ====================================== */
+        ========================= */
 
         async function submitPriceUpdate() {
 
             const item_id =
                 document
-                    .getElementById(
-                        "admin-item-id"
-                    )
+                    .getElementById("admin-item-id")
                     .value
                     .trim();
-
 
             const item_name =
                 document
-                    .getElementById(
-                        "admin-item-name"
-                    )
+                    .getElementById("admin-item-name")
                     .value
                     .trim();
-
 
             const sell_price =
                 parseFloat(
                     document
-                        .getElementById(
-                            "admin-sell"
-                        )
+                        .getElementById("admin-sell")
                         .value
                 );
 
-
             const password =
                 document
-                    .getElementById(
-                        "admin-pass"
-                    )
+                    .getElementById("admin-pass")
                     .value;
 
+            const t =
+                translations[currentLanguage];
 
             if (
                 !item_id ||
@@ -1231,14 +964,10 @@
                 !password
             ) {
 
-                alert(
-                    t("fillFields")
-                );
+                alert(t.fill);
 
                 return;
-
             }
-
 
             try {
 
@@ -1254,87 +983,71 @@
                                     "application/json"
                             },
 
-                            body:
-                                JSON.stringify({
-                                    item_id,
-                                    item_name,
-                                    sell_price,
-                                    password
-                                })
+                            body: JSON.stringify({
+                                item_id,
+                                item_name,
+                                sell_price,
+                                password
+                            })
                         }
                     );
-
 
                 const result =
                     await response.json();
 
-
                 alert(
                     result.message ||
-                    t("updateSuccess")
+                    "Done!"
                 );
 
-
                 fetchPrices();
-
 
             } catch (err) {
 
                 console.error(err);
 
-                alert(
-                    t("updateError")
-                );
-
+                alert(t.updateError);
             }
-
         }
 
-
-        /* ======================================
+        /* =========================
            DELETE ITEM
-        ====================================== */
+        ========================= */
 
         async function submitPriceDelete() {
 
             const item_id =
                 document
-                    .getElementById(
-                        "admin-item-id"
-                    )
+                    .getElementById("admin-item-id")
                     .value
                     .trim();
 
-
             const password =
                 document
-                    .getElementById(
-                        "admin-pass"
-                    )
+                    .getElementById("admin-pass")
                     .value;
 
+            const t =
+                translations[currentLanguage];
 
             if (!item_id || !password) {
 
                 alert(
-                    t("fillFields")
+                    t.itemId +
+                    " + " +
+                    t.password
                 );
 
                 return;
-
             }
-
 
             if (
                 !confirm(
-                    `${t("deleteConfirm")} ${item_id}?`
+                    `${t.deleteConfirm} ${item_id}?`
                 )
             ) {
-
                 return;
-
             }
-
 
             try {
 
@@ -1350,47 +1063,34 @@
                                     "application/json"
                             },
 
-                            body:
-                                JSON.stringify({
-                                    item_id,
-                                    password
-                                })
+                            body: JSON.stringify({
+                                item_id,
+                                password
+                            })
                         }
                     );
-
 
                 const result =
                     await response.json();
 
-
                 alert(
                     result.message ||
-                    t("deleteSuccess")
+                    "Done!"
                 );
 
-
                 fetchPrices();
-
 
             } catch (err) {
 
                 console.error(err);
 
-                alert(
-                    t("deleteError")
-                );
-
+                alert(t.deleteError);
             }
-
         }
 
+        /* START */
 
-        /* ======================================
-           START
-        ====================================== */
-
-        updateLanguage();
-
+        applyLanguage();
         fetchPrices();
 
     </script>
